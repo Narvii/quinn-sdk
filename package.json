@@ -1,6 +1,6 @@
 {
   "name": "@kaizenlabs/quinn-sdk",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "TypeScript SDK for Quinn Platform API.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

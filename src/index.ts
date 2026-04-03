@@ -18,6 +18,7 @@ import { MembersService } from './services/members';
 import { OrganizationsService } from './services/organizations';
 import { ProgramsService } from './services/programs';
 import { RolesService } from './services/roles';
+import { SignOffService } from './services/sign-off';
 
 export * from './types';
 export {
@@ -33,6 +34,7 @@ export {
   KnowledgeService,
 } from './services/knowledge';
 export { LocationsService } from './services/locations';
+export { SignOffService } from './services/sign-off';
 
 export class Quinn {
   private readonly config: QuinnResolvedConfig;
@@ -49,6 +51,7 @@ export class Quinn {
   readonly groups: GroupsService;
   readonly programs: ProgramsService;
   readonly endorsements: EndorsementsService;
+  readonly signOff: SignOffService;
 
   constructor(config: QuinnClientConfig = {}) {
     this.config = resolveQuinnConfig(config);
@@ -71,6 +74,7 @@ export class Quinn {
     this.groups = new GroupsService(this.http, this.assertMutationAllowed);
     this.programs = new ProgramsService(this.http, this.assertMutationAllowed);
     this.endorsements = new EndorsementsService(this.http, this.assertMutationAllowed);
+    this.signOff = new SignOffService(this.http, this.assertMutationAllowed);
   }
 
   private assertMutationAllowed = (operation: string): void => {
