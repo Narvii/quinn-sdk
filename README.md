@@ -2,7 +2,7 @@
 
 Typed TypeScript SDK for Quinn Platform.
 
-`@kaizenlabs/quinn-sdk` is an organization-scoped client for Quinn business domains such as members, roles, courses, assignments, groups, programs, and knowledge.
+`@kaizenlabs/quinn-sdk` is an organization-scoped client for Quinn business domains such as members, roles, courses, assignments, sign-off, groups, programs, and knowledge.
 
 ## Install
 
@@ -19,8 +19,9 @@ const quinn = new Quinn();
 
 const org = await quinn.organizations.current();
 const members = await quinn.members.list({ limit: 20 });
+const signOff = await quinn.signOff.list({ limit: 10 });
 
-console.log(org.organization?.name, members.items.length);
+console.log(org.organization?.name, members.items.length, signOff.items.length);
 ```
 
 ## Configuration
