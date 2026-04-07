@@ -616,6 +616,20 @@ export interface SignOffAssignmentRuntime {
   draft: SignOffSubmission | null;
 }
 
+export interface SignOffAssignmentRollForwardSkip {
+  assignmentId: string;
+  fromVersionId: string;
+  targetVersionId: string;
+  reason: string;
+}
+
+export interface RollForwardSignOffAssignmentsResult {
+  formId: string;
+  targetVersionId: string;
+  updatedAssignments: SignOffAssignment[];
+  skippedAssignments: SignOffAssignmentRollForwardSkip[];
+}
+
 export interface SignOffFormsQuery extends PaginationQuery {
   status?: SignOffFormStatus;
 }

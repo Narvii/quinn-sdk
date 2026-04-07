@@ -4,6 +4,7 @@ import {
   type CreateSignOffFormInput,
   type CreateSignOffFormVersionInput,
   type PagedResult,
+  type RollForwardSignOffAssignmentsResult,
   type SignOffAssignment,
   type SignOffAssignmentsQuery,
   type SignOffAssignmentRuntime,
@@ -128,6 +129,16 @@ export class SignOffService {
         inputs: input.inputs,
         dueDate: input.dueDate,
       }
+    );
+    return resp.data.item;
+  }
+
+  async rollForwardPendingAssignments(
+    formId: string
+  ): Promise<RollForwardSignOffAssignmentsResult> {
+    this.assertMutationAllowed('signOff.rollForwardPendingAssignments');
+    const resp = await this.http.post<{ item: RollForwardSignOffAssignmentsResult }>(
+      `/sign-offs/${formId}/assignments/roll-forward`
     );
     return resp.data.item;
   }
