@@ -63,7 +63,7 @@ export class Quinn {
         orgId: this.config.orgId,
       });
     this.organizations = new OrganizationsService(this.http, this.assertMutationAllowed);
-    this.knowledge = new KnowledgeService(this.http);
+    this.knowledge = new KnowledgeService(this.http, this.assertMutationAllowed);
     this.locations = new LocationsService(this.http, this.assertMutationAllowed);
     this.members = new MembersService(this.http, this.assertMutationAllowed);
     this.roles = new RolesService(this.http, this.assertMutationAllowed);
