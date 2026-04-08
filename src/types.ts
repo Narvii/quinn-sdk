@@ -250,6 +250,8 @@ export interface CompetencyProgression {
   firstCompletedAt: string | null;
   lastCompletedAt: string | null;
   endorsedAt: string | null;
+  selfAssessment: 'yes' | 'unsure' | 'no' | null;
+  selfAssessedAt: string | null;
 }
 
 export type CourseType = 'training' | 'assessment' | 'sign-off';
