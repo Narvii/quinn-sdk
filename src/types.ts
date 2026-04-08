@@ -229,7 +229,7 @@ export interface LearnerCompetencyProgress {
   user: LearnerSummary | null;
   roleId: string | null;
   levelProgressions: Record<string, LevelProgression>;
-  stackProgressions: Record<string, StackProgression>;
+  competencyProgressions: Record<string, CompetencyProgression>;
 }
 
 export interface LearnerSummary {
@@ -245,7 +245,7 @@ export interface LevelProgression {
   unlocked: boolean;
 }
 
-export interface StackProgression {
+export interface CompetencyProgression {
   progress: number;
   firstCompletedAt: string | null;
   lastCompletedAt: string | null;
