@@ -355,9 +355,35 @@ export interface KnowledgeDocumentsListQuery extends PaginationQuery {
   includePackFiles?: boolean;
 }
 
+export interface KnowledgeDocumentsMoveInput {
+  documentId: string;
+  folderId?: string | null;
+}
+
+export interface KnowledgeDocumentsUpdateVisibilityInput {
+  documentId: string;
+  visibility: 'organization' | 'restricted';
+}
+
 export interface GetDocumentTranscriptResponse {
   content: string;
 }
+
+export interface KnowledgeShareEntry {
+  id: string;
+  userId?: string | null;
+  groupId?: string | null;
+  inherited: boolean;
+  createdAt: string;
+}
+
+export interface KnowledgeSharesListQuery {
+  includeInherited?: boolean;
+}
+
+export type KnowledgeShareTarget =
+  | { userId: string; groupId?: never }
+  | { groupId: string; userId?: never };
 
 export interface KnowledgeFolder {
   id: string;
@@ -372,6 +398,26 @@ export interface KnowledgeFolder {
 
 export interface KnowledgeFoldersListQuery {
   parentId?: string;
+}
+
+export interface KnowledgeFoldersCreateInput {
+  name: string;
+  parentId?: string | null;
+}
+
+export interface KnowledgeFoldersRenameInput {
+  folderId: string;
+  name: string;
+}
+
+export interface KnowledgeFoldersMoveInput {
+  folderId: string;
+  parentId?: string | null;
+}
+
+export interface KnowledgeFoldersUpdateVisibilityInput {
+  folderId: string;
+  visibility: 'organization' | 'restricted';
 }
 
 export type GroupKind = 'user-managed' | 'auto-mapped';
