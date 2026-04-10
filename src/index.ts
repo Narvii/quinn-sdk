@@ -16,6 +16,7 @@ import { LevelsService } from './services/levels';
 import { LocationsService } from './services/locations';
 import { MembersService } from './services/members';
 import { OrganizationsService } from './services/organizations';
+import { ProgressionsService } from './services/progressions';
 import { ProgramsService } from './services/programs';
 import { RolesService } from './services/roles';
 import { SignOffService } from './services/sign-off';
@@ -34,6 +35,7 @@ export {
   KnowledgeService,
 } from './services/knowledge';
 export { LocationsService } from './services/locations';
+export { ProgressionsService } from './services/progressions';
 export { SignOffService } from './services/sign-off';
 
 export class Quinn {
@@ -48,6 +50,7 @@ export class Quinn {
   readonly competencies: CompetenciesService;
   readonly courses: CoursesService;
   readonly assignments: AssignmentsService;
+  readonly progressions: ProgressionsService;
   readonly groups: GroupsService;
   readonly programs: ProgramsService;
   readonly endorsements: EndorsementsService;
@@ -71,6 +74,7 @@ export class Quinn {
     this.competencies = new CompetenciesService(this.http, this.assertMutationAllowed);
     this.courses = new CoursesService(this.http, this.assertMutationAllowed);
     this.assignments = new AssignmentsService(this.http);
+    this.progressions = new ProgressionsService(this.http);
     this.groups = new GroupsService(this.http, this.assertMutationAllowed);
     this.programs = new ProgramsService(this.http, this.assertMutationAllowed);
     this.endorsements = new EndorsementsService(this.http, this.assertMutationAllowed);
