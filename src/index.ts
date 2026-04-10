@@ -6,6 +6,7 @@ import {
 } from './config';
 import { createQuinnHttpClient } from './http';
 import { assertMutationAllowed, QuinnMutationGuardError } from './mutation-access';
+import { AssessmentsService } from './services/assessments';
 import { AssignmentsService } from './services/assignments';
 import { CompetenciesService } from './services/competencies';
 import { CoursesService } from './services/courses';
@@ -29,6 +30,7 @@ export {
 } from './config';
 export type { QuinnClientConfig } from './config';
 export { QuinnMutationGuardError } from './mutation-access';
+export { AssessmentsService } from './services/assessments';
 export {
   KnowledgeDocumentsService,
   KnowledgeFoldersService,
@@ -41,6 +43,7 @@ export { SignOffService } from './services/sign-off';
 export class Quinn {
   private readonly config: QuinnResolvedConfig;
   private readonly http: AxiosInstance;
+  readonly assessments: AssessmentsService;
   readonly organizations: OrganizationsService;
   readonly knowledge: KnowledgeService;
   readonly locations: LocationsService;
@@ -65,6 +68,7 @@ export class Quinn {
         token: this.config.token,
         orgId: this.config.orgId,
       });
+    this.assessments = new AssessmentsService(this.http);
     this.organizations = new OrganizationsService(this.http, this.assertMutationAllowed);
     this.knowledge = new KnowledgeService(this.http, this.assertMutationAllowed);
     this.locations = new LocationsService(this.http, this.assertMutationAllowed);
