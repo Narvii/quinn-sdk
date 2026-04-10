@@ -5,6 +5,8 @@ import {
   CompetenciesUpdateInput,
   Competency,
   Course,
+  LearnerCompetencyProgressQuery,
+  LearnerCompetencyProgressResponse,
   PagedResult,
 } from '../types';
 
@@ -14,7 +16,7 @@ export class CompetenciesService {
     private readonly assertMutationAllowed: (operation: string) => void
   ) {}
 
-  async list(query: CompetenciesListQuery): Promise<PagedResult<Competency>> {
+  async list(query?: CompetenciesListQuery): Promise<PagedResult<Competency>> {
     const resp = await this.http.get<PagedResult<Competency>>(
       '/competencies',
       { params: query }
@@ -42,6 +44,16 @@ export class CompetenciesService {
       `/competencies/${id}/courses`
     );
     return resp.data.items;
+  }
+
+  async learnerProgress(
+    query?: LearnerCompetencyProgressQuery
+  ): Promise<LearnerCompetencyProgressResponse> {
+    const resp = await this.http.get<LearnerCompetencyProgressResponse>(
+      '/competencies/learner-progress',
+      { params: query }
+    );
+    return resp.data;
   }
 
   async create(input: CompetenciesCreateInput): Promise<Competency | null> {
