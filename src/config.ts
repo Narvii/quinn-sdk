@@ -3,6 +3,11 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
+import {
+  getGlobalMutationObserver,
+  type QuinnMutationObserver,
+} from './mutations';
+
 export const DEFAULT_QUINN_API_URL = 'https://api.lunapark.com';
 
 export interface QuinnClientConfig {
@@ -12,6 +17,7 @@ export interface QuinnClientConfig {
   configPath?: string;
   httpClient?: AxiosInstance;
   allowQuinnMutation?: boolean;
+  onMutationCommitted?: QuinnMutationObserver;
 }
 
 export interface QuinnResolvedConfig {
@@ -20,6 +26,7 @@ export interface QuinnResolvedConfig {
   orgId: string;
   httpClient?: AxiosInstance;
   allowQuinnMutation: boolean;
+  onMutationCommitted?: QuinnMutationObserver;
 }
 
 interface QuinnFileConfig {
@@ -63,6 +70,8 @@ export function resolveQuinnConfig(input: QuinnClientConfig): QuinnResolvedConfi
     orgId,
     httpClient: input.httpClient,
     allowQuinnMutation,
+    onMutationCommitted:
+      input.onMutationCommitted ?? getGlobalMutationObserver(),
   };
 }
 

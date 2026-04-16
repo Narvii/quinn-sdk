@@ -57,3 +57,47 @@ const quinn = new Quinn({
   allowQuinnMutation: false,
 });
 ```
+
+## Mutation Receipts
+
+The SDK can report successful business mutations without changing the return
+shape of each service method.
+
+```ts
+import { Quinn, type QuinnMutationReceipt } from "@kaizenlabs/quinn-sdk";
+
+const receipts: QuinnMutationReceipt[] = [];
+
+const quinn = new Quinn({
+  onMutationCommitted(receipt) {
+    receipts.push(receipt);
+  },
+});
+
+await quinn.signOff.createVersion("form_123", {
+  inputDefs: [],
+  schema: [],
+  html: "<html></html>",
+});
+
+console.log(receipts);
+// [
+//   {
+//     operation: "signOff.createVersion",
+//     affectedResources: [{ type: "sign-off-form", id: "form_123" }],
+//   },
+// ]
+```
+
+For runtimes that cannot pass constructor callbacks into agent-generated
+scripts, you can also register a process-wide observer before `new Quinn()`:
+
+```ts
+import { Quinn, setGlobalMutationObserver } from "@kaizenlabs/quinn-sdk";
+
+setGlobalMutationObserver((receipt) => {
+  console.log("mutation committed", receipt);
+});
+
+const quinn = new Quinn();
+```

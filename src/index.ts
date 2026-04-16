@@ -5,6 +5,10 @@ import {
   resolveQuinnConfig,
 } from './config';
 import { createQuinnHttpClient } from './http';
+import {
+  notifyMutationObserver,
+  type QuinnMutationReceipt,
+} from './mutations';
 import { assertMutationAllowed, QuinnMutationGuardError } from './mutation-access';
 import { AssessmentsService } from './services/assessments';
 import { AssignmentsService } from './services/assignments';
@@ -29,6 +33,17 @@ export {
   resolveConfigPath,
 } from './config';
 export type { QuinnClientConfig } from './config';
+export {
+  getGlobalMutationObserver,
+  notifyMutationObserver,
+  setGlobalMutationObserver,
+} from './mutations';
+export type {
+  QuinnAffectedResource,
+  QuinnAffectedResourceType,
+  QuinnMutationObserver,
+  QuinnMutationReceipt,
+} from './mutations';
 export { QuinnMutationGuardError } from './mutation-access';
 export { AssessmentsService } from './services/assessments';
 export {
@@ -82,10 +97,20 @@ export class Quinn {
     this.groups = new GroupsService(this.http, this.assertMutationAllowed);
     this.programs = new ProgramsService(this.http, this.assertMutationAllowed);
     this.endorsements = new EndorsementsService(this.http, this.assertMutationAllowed);
-    this.signOff = new SignOffService(this.http, this.assertMutationAllowed);
+    this.signOff = new SignOffService(
+      this.http,
+      this.assertMutationAllowed,
+      this.notifyMutationCommitted
+    );
   }
 
   private assertMutationAllowed = (operation: string): void => {
     assertMutationAllowed(this.config.allowQuinnMutation, operation);
+  };
+
+  private notifyMutationCommitted = async (
+    receipt: QuinnMutationReceipt
+  ): Promise<void> => {
+    await notifyMutationObserver(this.config.onMutationCommitted, receipt);
   };
 }

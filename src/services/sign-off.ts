@@ -14,11 +14,15 @@ import {
   type SignOffSubmissionsQuery,
   type UpdateSignOffFormInput,
 } from '../types';
+import { type QuinnMutationReceipt } from '../mutations';
 
 export class SignOffService {
   constructor(
     private readonly http: AxiosInstance,
-    private readonly assertMutationAllowed: (operation: string) => void
+    private readonly assertMutationAllowed: (operation: string) => void,
+    private readonly notifyMutationCommitted?: (
+      receipt: QuinnMutationReceipt
+    ) => Promise<void>
   ) {}
 
   async list(query: SignOffFormsQuery = {}): Promise<PagedResult<SignOffForm>> {
@@ -48,6 +52,7 @@ export class SignOffService {
       schema: input.schema,
       html: input.html,
     });
+    await this.notifyFormMutation('signOff.create', resp.data.item.id);
     return resp.data.item;
   }
 
@@ -58,6 +63,7 @@ export class SignOffService {
       description: input.description,
       status: input.status,
     });
+    await this.notifyFormMutation('signOff.update', formId);
     return resp.data.item;
   }
 
@@ -78,6 +84,7 @@ export class SignOffService {
         html: input.html,
       }
     );
+    await this.notifyFormMutation('signOff.createVersion', formId);
     return resp.data.item;
   }
 
@@ -173,5 +180,20 @@ export class SignOffService {
       `/sign-offs/submissions/${submissionId}`
     );
     return resp.data.item;
+  }
+
+  private async notifyFormMutation(
+    operation: string,
+    formId: string
+  ): Promise<void> {
+    await this.notifyMutationCommitted?.({
+      operation,
+      affectedResources: [
+        {
+          type: 'sign-off-form',
+          id: formId,
+        },
+      ],
+    });
   }
 }
