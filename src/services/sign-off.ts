@@ -48,9 +48,7 @@ export class SignOffService {
     const resp = await this.http.post<{ item: SignOffForm }>('/sign-offs', {
       name: input.name,
       description: input.description,
-      inputDefs: input.inputDefs,
-      schema: input.schema,
-      html: input.html,
+      initialVersion: input.initialVersion,
     });
     await this.notifyFormMutation('signOff.create', resp.data.item.id);
     return resp.data.item;
