@@ -790,9 +790,11 @@ export interface SignOffSubmissionsQuery extends PaginationQuery {
 export interface CreateSignOffFormInput {
   name: string;
   description?: string | null;
-  inputDefs: SignOffInputDef[];
-  schema: SignOffFieldDef[];
-  html: string;
+  initialVersion?: {
+    inputDefs: SignOffInputDef[];
+    schema: SignOffFieldDef[];
+    html: string;
+  };
 }
 
 export interface UpdateSignOffFormInput {
