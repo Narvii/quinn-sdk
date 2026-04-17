@@ -1,6 +1,8 @@
 import { AxiosInstance } from 'axios';
 import {
   Member,
+  MemberCustomFieldDefinition,
+  MembersCreateCustomFieldDefinitionInput,
   MembersBatchGetInput,
   MembersCreateInput,
   MembersUpdateGroupsInput,
@@ -44,6 +46,24 @@ export class MembersService {
       params: query,
     });
     return resp.data;
+  }
+
+  async listCustomFieldDefinitions(): Promise<MemberCustomFieldDefinition[]> {
+    const resp = await this.http.get<{ items: MemberCustomFieldDefinition[] }>(
+      '/members/custom-field-definitions'
+    );
+    return resp.data.items;
+  }
+
+  async createCustomFieldDefinition(
+    input: MembersCreateCustomFieldDefinitionInput
+  ): Promise<MemberCustomFieldDefinition> {
+    this.assertMutationAllowed('members.createCustomFieldDefinition');
+    const resp = await this.http.post<{ item: MemberCustomFieldDefinition }>(
+      '/members/custom-field-definitions',
+      input
+    );
+    return resp.data.item;
   }
 
   async get(id: string): Promise<Member | null> {

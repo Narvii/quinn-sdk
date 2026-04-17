@@ -11,6 +11,7 @@ import {
   type WorkflowTrigger,
   type WorkflowUpdateInput,
   type WorkflowValidationResult,
+  type WorkflowVersionValidateInput,
   type WorkflowVersion,
   type WorkflowVersionSummary,
 } from '../types';
@@ -151,10 +152,17 @@ export class WorkflowsService {
 
   async validateVersion(
     workflowId: string,
-    versionId: string
+    versionId: string,
+    input: WorkflowVersionValidateInput
   ): Promise<WorkflowValidationResult> {
     const resp = await this.http.post<{ item: WorkflowValidationResult }>(
-      `/workflows/${workflowId}/versions/${versionId}/validate`
+      `/workflows/${workflowId}/versions/${versionId}/validate`,
+      undefined,
+      {
+        params: {
+          target: input.target,
+        },
+      }
     );
     return resp.data.item;
   }

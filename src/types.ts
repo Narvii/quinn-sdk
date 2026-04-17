@@ -97,6 +97,26 @@ export interface MembersUpdateProfileInput {
   phoneNumber?: string;
 }
 
+export type MemberCustomFieldType =
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'date'
+  | 'string_list';
+
+export interface MemberCustomFieldDefinition {
+  id: string;
+  key: string;
+  label: string;
+  type: MemberCustomFieldType;
+}
+
+export interface MembersCreateCustomFieldDefinitionInput {
+  key: string;
+  label: string;
+  type: MemberCustomFieldType;
+}
+
 export interface Location {
   id: string;
   orgId: string;
@@ -839,12 +859,23 @@ export interface WorkflowCounts {
   instances: number;
 }
 
-export interface WorkflowValidationIssue {
-  path: string;
-  message: string;
+export interface AuthoringEventRegistryItem {
+  type: string;
+  dataSchema: Record<string, unknown>;
 }
 
+export interface WorkflowValidationIssue {
+  code: string;
+  path: string;
+  message: string;
+  severity: 'error' | 'warning';
+  blocks: Array<'draft' | 'publish'>;
+}
+
+export type WorkflowValidationTarget = 'draft' | 'publish';
+
 export interface WorkflowValidationResult {
+  target: WorkflowValidationTarget;
   valid: boolean;
   issues: WorkflowValidationIssue[];
   nodeRefs: string[];
@@ -1015,6 +1046,10 @@ export interface WorkflowDraftVersionInput {
   bindings?: WorkflowBindings;
   authoring?: WorkflowAuthoring | null;
   triggers?: WorkflowDraftTriggerInput[];
+}
+
+export interface WorkflowVersionValidateInput {
+  target: WorkflowValidationTarget;
 }
 
 export interface WorkflowRunsListQuery {
