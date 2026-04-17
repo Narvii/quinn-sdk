@@ -25,6 +25,7 @@ import { ProgressionsService } from './services/progressions';
 import { ProgramsService } from './services/programs';
 import { RolesService } from './services/roles';
 import { SignOffService } from './services/sign-off';
+import { WorkflowsService } from './services/workflows';
 
 export * from './types';
 export {
@@ -54,6 +55,7 @@ export {
 export { LocationsService } from './services/locations';
 export { ProgressionsService } from './services/progressions';
 export { SignOffService } from './services/sign-off';
+export { WorkflowsService } from './services/workflows';
 
 export class Quinn {
   private readonly config: QuinnResolvedConfig;
@@ -73,6 +75,7 @@ export class Quinn {
   readonly programs: ProgramsService;
   readonly endorsements: EndorsementsService;
   readonly signOff: SignOffService;
+  readonly workflows: WorkflowsService;
 
   constructor(config: QuinnClientConfig = {}) {
     this.config = resolveQuinnConfig(config);
@@ -98,6 +101,11 @@ export class Quinn {
     this.programs = new ProgramsService(this.http, this.assertMutationAllowed);
     this.endorsements = new EndorsementsService(this.http, this.assertMutationAllowed);
     this.signOff = new SignOffService(
+      this.http,
+      this.assertMutationAllowed,
+      this.notifyMutationCommitted
+    );
+    this.workflows = new WorkflowsService(
       this.http,
       this.assertMutationAllowed,
       this.notifyMutationCommitted

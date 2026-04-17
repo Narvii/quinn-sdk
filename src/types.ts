@@ -794,6 +794,234 @@ export interface CreateSignOffAssignmentInput {
   dueDate?: string | null;
 }
 
+export type WorkflowStatus = 'draft' | 'active' | 'archived';
+
+export type WorkflowVersionStatus =
+  | 'draft'
+  | 'publishing'
+  | 'published'
+  | 'publish_failed'
+  | 'deprecated';
+
+export type WorkflowRunStatus =
+  | 'pending'
+  | 'running'
+  | 'completed'
+  | 'failed'
+  | 'canceled';
+
+export type WorkflowTaskStatus =
+  | 'pending'
+  | 'active'
+  | 'completed'
+  | 'failed'
+  | 'canceled'
+  | 'skipped';
+
+export type WorkflowPredicateOp =
+  | 'eq'
+  | 'neq'
+  | 'exists'
+  | 'in'
+  | 'gt'
+  | 'lt'
+  | 'gte'
+  | 'lte';
+
+export type WorkflowDocument = Record<string, unknown>;
+
+export type WorkflowBindings = Record<string, unknown>;
+
+export type WorkflowAuthoring = Record<string, unknown>;
+
+export interface WorkflowCounts {
+  versions: number;
+  instances: number;
+}
+
+export interface WorkflowValidationIssue {
+  path: string;
+  message: string;
+}
+
+export interface WorkflowValidationResult {
+  valid: boolean;
+  issues: WorkflowValidationIssue[];
+  nodeRefs: string[];
+}
+
+export interface WorkflowPublishResult {
+  workflowId: string;
+  versionId: string;
+  status: 'published';
+  sfnArn: string;
+  issues: WorkflowValidationIssue[];
+}
+
+export interface WorkflowEventMatchPredicate {
+  op: WorkflowPredicateOp;
+  path: string;
+  value?: unknown;
+}
+
+export interface WorkflowEventMatchFilter {
+  all?: WorkflowEventMatchPredicate[];
+  any?: WorkflowEventMatchPredicate[];
+}
+
+export interface WorkflowTrigger {
+  id: string;
+  customerWorkflowVersionId: string;
+  eventType: string;
+  filter: WorkflowEventMatchFilter | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WorkflowVersionSummary {
+  id: string;
+  workflowId: string;
+  versionNumber: number;
+  status: WorkflowVersionStatus;
+  sfnArn: string | null;
+  publishedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WorkflowSummary {
+  id: string;
+  orgId: string;
+  name: string;
+  description: string | null;
+  status: WorkflowStatus;
+  currentVersionId: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WorkflowDetail extends WorkflowSummary {
+  currentVersion: WorkflowVersionSummary | null;
+  versions: WorkflowVersionSummary[];
+  counts: WorkflowCounts;
+}
+
+export interface WorkflowVersion {
+  id: string;
+  workflowId: string;
+  versionNumber: number;
+  status: WorkflowVersionStatus;
+  sfnArn: string | null;
+  publishedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  asl: WorkflowDocument;
+  bindings: WorkflowBindings;
+  authoring: WorkflowAuthoring | null;
+  triggers: WorkflowTrigger[];
+}
+
+export interface WorkflowSubject {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export interface WorkflowActor {
+  ref: string;
+  type: string;
+  id: string;
+  name: string;
+  email: string | null;
+}
+
+export interface WorkflowTask {
+  id: string;
+  workflowInstanceId: string;
+  subjectId: string;
+  actorRef: string;
+  nodeRef: string;
+  mode: string;
+  label: string;
+  input: Record<string, unknown>;
+  output: Record<string, unknown>;
+  metadata: Record<string, unknown>;
+  completionEventType: string | null;
+  completionFilter: Record<string, unknown>;
+  status: WorkflowTaskStatus;
+  activatedAt: string | null;
+  completedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  subject: WorkflowSubject | null;
+  actor: WorkflowActor | null;
+}
+
+export interface WorkflowRunSummary {
+  id: string;
+  orgId: string;
+  customerWorkflowId: string;
+  customerWorkflowVersionId: string;
+  subjectId: string;
+  status: WorkflowRunStatus;
+  engineExecutionId: string | null;
+  startedAt: string | null;
+  completedAt: string | null;
+  failedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  subject: WorkflowSubject | null;
+  tasks: WorkflowTask[];
+  version: WorkflowVersionSummary | null;
+}
+
+export interface WorkflowRun {
+  id: string;
+  orgId: string;
+  customerWorkflowId: string;
+  customerWorkflowVersionId: string;
+  subjectId: string;
+  status: WorkflowRunStatus;
+  engineExecutionId: string | null;
+  startedAt: string | null;
+  completedAt: string | null;
+  failedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  subject: WorkflowSubject | null;
+  tasks: WorkflowTask[];
+  version: WorkflowVersion;
+  workflow: WorkflowSummary;
+  managedSchedules: Array<Record<string, unknown>>;
+}
+
+export interface WorkflowCreateInput {
+  name: string;
+  description?: string | null;
+}
+
+export interface WorkflowUpdateInput {
+  name?: string | null;
+  description?: string | null;
+}
+
+export interface WorkflowDraftTriggerInput {
+  eventType: string;
+  filter?: WorkflowEventMatchFilter | null;
+}
+
+export interface WorkflowDraftVersionInput {
+  asl?: WorkflowDocument;
+  bindings?: WorkflowBindings;
+  authoring?: WorkflowAuthoring | null;
+  triggers?: WorkflowDraftTriggerInput[];
+}
+
+export interface WorkflowRunsListQuery {
+  status?: WorkflowRunStatus;
+  limit?: number;
+}
+
 export type AssessmentStatus =
   | 'processing'
   | 'pending_review'
