@@ -416,14 +416,27 @@ export interface KnowledgeSearchInput {
   size?: number;
 }
 
+export type KnowledgeSearchHitSource =
+  | {
+      kind: 'knowledge-document';
+      documentId: string;
+      displayName: string;
+      originalName: string;
+      contentType?: string | null;
+    }
+  | {
+      kind: 'course';
+      courseId: string;
+      name: string;
+      blockId?: string | null;
+    };
+
 export interface KnowledgeSearchHit {
   id: string;
   type: string;
   text: string;
-  documentId?: string | null;
-  courseId?: string | null;
-  blockId?: string | null;
   metadata?: Record<string, unknown>;
+  source?: KnowledgeSearchHitSource;
 }
 
 export interface KnowledgeDocument {
