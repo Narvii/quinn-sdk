@@ -14,6 +14,16 @@ import {
   type WorkflowVersionValidateInput,
   type WorkflowVersion,
   type WorkflowVersionSummary,
+  type WorkflowCollection,
+  type WorkflowCollectionCreateInput,
+  type WorkflowCollectionUpdateInput,
+  type WorkflowReview,
+  type WorkflowReviewCreateInput,
+  type WorkflowReviewUpdateInput,
+  type WorkflowReviewComment,
+  type WorkflowReviewCommentCreateInput,
+  type WorkflowReviewCommentUpdateInput,
+  type WorkflowReviewCommentQueryInput,
 } from '../types';
 import { type QuinnMutationReceipt } from '../mutations';
 
@@ -213,6 +223,215 @@ export class WorkflowsService {
       `/workflow-runs/${runId}`
     );
     return resp.data.item;
+  }
+
+  // --- Collections (Workspaces) ---
+
+  async listCollections(): Promise<WorkflowCollection[]> {
+    const resp = await this.http.get<{ collections: WorkflowCollection[] }>(
+      '/workflow-collections'
+    );
+    return resp.data.collections;
+  }
+
+  async getCollection(collectionId: string): Promise<WorkflowCollection> {
+    const resp = await this.http.get<{ collection: WorkflowCollection }>(
+      `/workflow-collections/${collectionId}`
+    );
+    return resp.data.collection;
+  }
+
+  async createCollection(
+    input: WorkflowCollectionCreateInput
+  ): Promise<WorkflowCollection> {
+    this.assertMutationAllowed('workflows.createCollection');
+    const resp = await this.http.post<{ collection: WorkflowCollection }>(
+      '/workflow-collections',
+      input
+    );
+    await this.notifyCollectionMutation('workflows.createCollection', resp.data.collection.id);
+    return resp.data.collection;
+  }
+
+  async updateCollection(
+    collectionId: string,
+    input: WorkflowCollectionUpdateInput
+  ): Promise<WorkflowCollection> {
+    this.assertMutationAllowed('workflows.updateCollection');
+    const resp = await this.http.put<{ collection: WorkflowCollection }>(
+      `/workflow-collections/${collectionId}`,
+      input
+    );
+    await this.notifyCollectionMutation('workflows.updateCollection', collectionId);
+    return resp.data.collection;
+  }
+
+  async deleteCollection(collectionId: string): Promise<void> {
+    this.assertMutationAllowed('workflows.deleteCollection');
+    await this.http.delete(`/workflow-collections/${collectionId}`);
+    await this.notifyCollectionMutation('workflows.deleteCollection', collectionId);
+  }
+
+  // --- Reviews (Walkthroughs) ---
+
+  async getReview(reviewId: string): Promise<WorkflowReview> {
+    const resp = await this.http.get<{ review: WorkflowReview }>(
+      `/workflow-reviews/${reviewId}`
+    );
+    return resp.data.review;
+  }
+
+  async getReviewByTarget(
+    targetKind: string,
+    targetId: string
+  ): Promise<WorkflowReview | null> {
+    try {
+      const resp = await this.http.get<{ review: WorkflowReview }>(
+        `/workflow-reviews/target/${targetKind}/${targetId}`
+      );
+      return resp.data.review;
+    } catch (err: unknown) {
+      if (
+        err != null &&
+        typeof err === 'object' &&
+        'response' in err &&
+        (err as { response?: { status?: number } }).response?.status === 404
+      ) {
+        return null;
+      }
+      throw err;
+    }
+  }
+
+  async createReview(
+    input: WorkflowReviewCreateInput
+  ): Promise<WorkflowReview> {
+    this.assertMutationAllowed('workflows.createReview');
+    const resp = await this.http.post<{ review: WorkflowReview }>(
+      '/workflow-reviews',
+      input
+    );
+    await this.notifyReviewMutation('workflows.createReview', resp.data.review.id);
+    return resp.data.review;
+  }
+
+  async updateReview(
+    reviewId: string,
+    input: WorkflowReviewUpdateInput
+  ): Promise<WorkflowReview> {
+    this.assertMutationAllowed('workflows.updateReview');
+    const resp = await this.http.put<{ review: WorkflowReview }>(
+      `/workflow-reviews/${reviewId}`,
+      input
+    );
+    await this.notifyReviewMutation('workflows.updateReview', reviewId);
+    return resp.data.review;
+  }
+
+  async deleteReview(reviewId: string): Promise<void> {
+    this.assertMutationAllowed('workflows.deleteReview');
+    await this.http.delete(`/workflow-reviews/${reviewId}`);
+    await this.notifyReviewMutation('workflows.deleteReview', reviewId);
+  }
+
+  async generateShareToken(reviewId: string): Promise<WorkflowReview> {
+    this.assertMutationAllowed('workflows.generateShareToken');
+    const resp = await this.http.post<{ review: WorkflowReview }>(
+      `/workflow-reviews/${reviewId}/share-token`
+    );
+    await this.notifyReviewMutation('workflows.generateShareToken', reviewId);
+    return resp.data.review;
+  }
+
+  async revokeShareToken(reviewId: string): Promise<void> {
+    this.assertMutationAllowed('workflows.revokeShareToken');
+    await this.http.delete(`/workflow-reviews/${reviewId}/share-token`);
+    await this.notifyReviewMutation('workflows.revokeShareToken', reviewId);
+  }
+
+  // --- Review Comments ---
+
+  async queryComments(
+    workflowId: string,
+    query?: WorkflowReviewCommentQueryInput
+  ): Promise<WorkflowReviewComment[]> {
+    const resp = await this.http.get<{ comments: WorkflowReviewComment[] }>(
+      '/workflow-reviews/comments',
+      {
+        params: {
+          workflowId,
+          versionId: query?.versionId,
+          nodeId: query?.nodeId,
+          status: query?.status,
+        },
+      }
+    );
+    return resp.data.comments;
+  }
+
+  async createComment(
+    reviewId: string,
+    input: WorkflowReviewCommentCreateInput
+  ): Promise<WorkflowReviewComment> {
+    this.assertMutationAllowed('workflows.createComment');
+    const resp = await this.http.post<{ comment: WorkflowReviewComment }>(
+      `/workflow-reviews/${reviewId}/comments`,
+      input
+    );
+    await this.notifyReviewMutation('workflows.createComment', reviewId);
+    return resp.data.comment;
+  }
+
+  async updateComment(
+    reviewId: string,
+    commentId: string,
+    input: WorkflowReviewCommentUpdateInput
+  ): Promise<WorkflowReviewComment> {
+    this.assertMutationAllowed('workflows.updateComment');
+    const resp = await this.http.put<{ comment: WorkflowReviewComment }>(
+      `/workflow-reviews/${reviewId}/comments/${commentId}`,
+      input
+    );
+    await this.notifyReviewMutation('workflows.updateComment', reviewId);
+    return resp.data.comment;
+  }
+
+  async deleteComment(reviewId: string, commentId: string): Promise<void> {
+    this.assertMutationAllowed('workflows.deleteComment');
+    await this.http.delete(
+      `/workflow-reviews/${reviewId}/comments/${commentId}`
+    );
+    await this.notifyReviewMutation('workflows.deleteComment', reviewId);
+  }
+
+  private async notifyCollectionMutation(
+    operation: string,
+    collectionId: string
+  ): Promise<void> {
+    await this.notifyMutationCommitted?.({
+      operation,
+      affectedResources: [
+        {
+          type: 'workflow-collection',
+          id: collectionId,
+        },
+      ],
+    });
+  }
+
+  private async notifyReviewMutation(
+    operation: string,
+    reviewId: string
+  ): Promise<void> {
+    await this.notifyMutationCommitted?.({
+      operation,
+      affectedResources: [
+        {
+          type: 'workflow-review',
+          id: reviewId,
+        },
+      ],
+    });
   }
 
   private async notifyWorkflowMutation(
