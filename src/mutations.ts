@@ -1,7 +1,9 @@
 export type QuinnAffectedResourceType =
   | 'sign-off-form'
   | 'workflow'
-  | 'workflow-version';
+  | 'workflow-version'
+  | 'workflow-collection'
+  | 'workflow-review';
 
 export interface QuinnAffectedResource {
   type: QuinnAffectedResourceType;
