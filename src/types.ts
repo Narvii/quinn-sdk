@@ -30,6 +30,93 @@ export interface OrganizationUpdateInput {
   brandColor?: string;
 }
 
+export type AutomationRunStatus = 'queued' | 'running' | 'completed' | 'failed';
+export type AutomationRunTriggerKind =
+  | 'event'
+  | 'cronjob'
+  | 'at-time'
+  | 'run-now';
+
+export type AutomationTrigger =
+  | {
+      type: 'cronjob';
+      cronjob: {
+        expression: string;
+        timezone: string;
+      };
+    }
+  | {
+      type: 'at-time';
+      atTime: {
+        datetime: string;
+        timezone: string;
+      };
+    }
+  | {
+      type: 'event-driven';
+      event: {
+        type: string;
+        delayedMinutes?: number;
+      };
+    };
+
+export interface Automation {
+  id: string;
+  orgId: string;
+  isEnabled: boolean;
+  source: 'custom';
+  name: string | null;
+  trigger: AutomationTrigger;
+  templateKey: string | null;
+  variables?: Record<string, unknown> | null;
+  instruction: string | null;
+  campaignId: string | null;
+  template?: unknown | null;
+  creatorUid: string;
+  lastModifiedByUid: string;
+  createdAt: string;
+  updatedAt: string;
+  creator?: unknown | null;
+  campaign?: unknown | null;
+}
+
+export interface AutomationRun {
+  runId: string;
+  automationId: string;
+  orgId: string;
+  source: 'custom';
+  triggeredAt: string;
+  completedAt?: string | null;
+  triggerKind: AutomationRunTriggerKind;
+  status: AutomationRunStatus;
+  sessionId?: string | null;
+  sandboxStatus?: string | null;
+  lastActiveAt?: string | null;
+  errorInfo?: Record<string, unknown> | null;
+}
+
+export interface AutomationsListQuery {
+  limit?: number;
+}
+
+export interface AutomationsCreateInput {
+  name: string;
+  instruction: string;
+  trigger: AutomationTrigger;
+  isEnabled?: boolean;
+}
+
+export interface AutomationsUpdateInput {
+  name?: string;
+  instruction?: string;
+  trigger?: AutomationTrigger;
+  isEnabled?: boolean;
+}
+
+export interface AutomationRunsListQuery {
+  limit?: number;
+}
+
 export interface Member {
   userId: string;
   email: string;

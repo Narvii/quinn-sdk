@@ -10,6 +10,7 @@ import {
   type QuinnMutationReceipt,
 } from './mutations';
 import { assertMutationAllowed, QuinnMutationGuardError } from './mutation-access';
+import { AutomationsService } from './services/automations';
 import { AuthoringService } from './services/authoring';
 import { AssessmentsService } from './services/assessments';
 import { AssignmentsService } from './services/assignments';
@@ -47,6 +48,7 @@ export type {
   QuinnMutationReceipt,
 } from './mutations';
 export { QuinnMutationGuardError } from './mutation-access';
+export { AutomationsService } from './services/automations';
 export { AssessmentsService } from './services/assessments';
 export { AuthoringService } from './services/authoring';
 export {
@@ -62,6 +64,7 @@ export { WorkflowsService } from './services/workflows';
 export class Quinn {
   private readonly config: QuinnResolvedConfig;
   private readonly http: AxiosInstance;
+  readonly automations: AutomationsService;
   readonly authoring: AuthoringService;
   readonly assessments: AssessmentsService;
   readonly organizations: OrganizationsService;
@@ -89,6 +92,11 @@ export class Quinn {
         token: this.config.token,
         orgId: this.config.orgId,
       });
+    this.automations = new AutomationsService(
+      this.http,
+      this.assertMutationAllowed,
+      this.notifyMutationCommitted
+    );
     this.authoring = new AuthoringService(this.http);
     this.assessments = new AssessmentsService(this.http);
     this.organizations = new OrganizationsService(this.http, this.assertMutationAllowed);

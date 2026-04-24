@@ -2,6 +2,8 @@ export type QuinnAffectedResourceType =
   | 'sign-off-form'
   | 'workflow'
   | 'workflow-version'
+  | 'automation'
+  | 'automation-run'
   | 'workflow-collection'
   | 'workflow-review';
 
