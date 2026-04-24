@@ -20,10 +20,6 @@ export interface Organization {
   } | null;
 }
 
-export interface OrganizationDetails {
-  organization: Organization | null;
-}
-
 export interface OrganizationUpdateInput {
   name?: string;
   logoMediaId?: string;
@@ -668,11 +664,6 @@ export interface GroupMember {
 export interface GroupsCreateInput {
   name: string;
   userIds?: string[];
-}
-
-export interface GroupsCreateResult {
-  group: Group;
-  assignedUsers: AssignedUser[];
 }
 
 export interface GroupsUpdateNameInput {

@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { OrganizationDetails, OrganizationUpdateInput } from '../types';
+import { Organization, OrganizationUpdateInput } from '../types';
 
 export class OrganizationsService {
   constructor(
@@ -7,14 +7,14 @@ export class OrganizationsService {
     private readonly assertMutationAllowed: (operation: string) => void
   ) {}
 
-  async current(): Promise<OrganizationDetails> {
-    const resp = await this.http.get<{ item: OrganizationDetails }>('/');
+  async current(): Promise<Organization | null> {
+    const resp = await this.http.get<{ item: Organization | null }>('/');
     return resp.data.item;
   }
 
-  async update(input: OrganizationUpdateInput): Promise<OrganizationDetails> {
+  async update(input: OrganizationUpdateInput): Promise<Organization | null> {
     this.assertMutationAllowed('organizations.update');
-    const resp = await this.http.patch<{ item: OrganizationDetails }>(
+    const resp = await this.http.patch<{ item: Organization | null }>(
       '/',
       input
     );
