@@ -204,6 +204,25 @@ export interface MembersCreateCustomFieldDefinitionInput {
   type: MemberCustomFieldType;
 }
 
+export interface MemberCustomFieldValue {
+  fieldId: string;
+  key: string;
+  label: string;
+  type: MemberCustomFieldType;
+  value: unknown;
+}
+
+export interface MembersSetCustomFieldInput {
+  memberId: string;
+  fieldKey: string;
+  value: unknown;
+}
+
+export interface MembersDeleteCustomFieldInput {
+  memberId: string;
+  fieldKey: string;
+}
+
 export interface Location {
   id: string;
   orgId: string;

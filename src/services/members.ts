@@ -2,7 +2,10 @@ import { AxiosInstance } from 'axios';
 import {
   Member,
   MemberCustomFieldDefinition,
+  MemberCustomFieldValue,
   MembersCreateCustomFieldDefinitionInput,
+  MembersSetCustomFieldInput,
+  MembersDeleteCustomFieldInput,
   MembersBatchGetInput,
   MembersCreateInput,
   MembersUpdateGroupsInput,
@@ -64,6 +67,33 @@ export class MembersService {
       input
     );
     return resp.data.item;
+  }
+
+  async getCustomFields(memberId: string): Promise<MemberCustomFieldValue[]> {
+    const resp = await this.http.get<{ items: MemberCustomFieldValue[] }>(
+      `/members/${memberId}/custom-fields`
+    );
+    return resp.data.items;
+  }
+
+  async setCustomField(
+    input: MembersSetCustomFieldInput
+  ): Promise<MemberCustomFieldValue> {
+    this.assertMutationAllowed('members.setCustomField');
+    const resp = await this.http.put<{ item: MemberCustomFieldValue }>(
+      `/members/${input.memberId}/custom-fields/${input.fieldKey}`,
+      { value: input.value }
+    );
+    return resp.data.item;
+  }
+
+  async deleteCustomField(
+    input: MembersDeleteCustomFieldInput
+  ): Promise<void> {
+    this.assertMutationAllowed('members.deleteCustomField');
+    await this.http.delete(
+      `/members/${input.memberId}/custom-fields/${input.fieldKey}`
+    );
   }
 
   async get(id: string): Promise<Member | null> {
