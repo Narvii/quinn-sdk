@@ -228,29 +228,29 @@ export class WorkflowsService {
   // --- Collections (Workspaces) ---
 
   async listCollections(): Promise<WorkflowCollection[]> {
-    const resp = await this.http.get<{ collections: WorkflowCollection[] }>(
+    const resp = await this.http.get<{ items: WorkflowCollection[] }>(
       '/workflow-collections'
     );
-    return resp.data.collections;
+    return resp.data.items;
   }
 
   async getCollection(collectionId: string): Promise<WorkflowCollection> {
-    const resp = await this.http.get<{ collection: WorkflowCollection }>(
+    const resp = await this.http.get<{ item: WorkflowCollection }>(
       `/workflow-collections/${collectionId}`
     );
-    return resp.data.collection;
+    return resp.data.item;
   }
 
   async createCollection(
     input: WorkflowCollectionCreateInput
   ): Promise<WorkflowCollection> {
     this.assertMutationAllowed('workflows.createCollection');
-    const resp = await this.http.post<{ collection: WorkflowCollection }>(
+    const resp = await this.http.post<{ item: WorkflowCollection }>(
       '/workflow-collections',
       input
     );
-    await this.notifyCollectionMutation('workflows.createCollection', resp.data.collection.id);
-    return resp.data.collection;
+    await this.notifyCollectionMutation('workflows.createCollection', resp.data.item.id);
+    return resp.data.item;
   }
 
   async updateCollection(
@@ -258,12 +258,12 @@ export class WorkflowsService {
     input: WorkflowCollectionUpdateInput
   ): Promise<WorkflowCollection> {
     this.assertMutationAllowed('workflows.updateCollection');
-    const resp = await this.http.put<{ collection: WorkflowCollection }>(
+    const resp = await this.http.put<{ item: WorkflowCollection }>(
       `/workflow-collections/${collectionId}`,
       input
     );
     await this.notifyCollectionMutation('workflows.updateCollection', collectionId);
-    return resp.data.collection;
+    return resp.data.item;
   }
 
   async deleteCollection(collectionId: string): Promise<void> {
@@ -275,10 +275,10 @@ export class WorkflowsService {
   // --- Reviews (Walkthroughs) ---
 
   async getReview(reviewId: string): Promise<WorkflowReview> {
-    const resp = await this.http.get<{ review: WorkflowReview }>(
+    const resp = await this.http.get<{ item: WorkflowReview }>(
       `/workflow-reviews/${reviewId}`
     );
-    return resp.data.review;
+    return resp.data.item;
   }
 
   async getReviewByTarget(
@@ -286,10 +286,10 @@ export class WorkflowsService {
     targetId: string
   ): Promise<WorkflowReview | null> {
     try {
-      const resp = await this.http.get<{ review: WorkflowReview }>(
+      const resp = await this.http.get<{ item: WorkflowReview }>(
         `/workflow-reviews/target/${targetKind}/${targetId}`
       );
-      return resp.data.review;
+      return resp.data.item;
     } catch (err: unknown) {
       if (
         err != null &&
@@ -307,12 +307,12 @@ export class WorkflowsService {
     input: WorkflowReviewCreateInput
   ): Promise<WorkflowReview> {
     this.assertMutationAllowed('workflows.createReview');
-    const resp = await this.http.post<{ review: WorkflowReview }>(
+    const resp = await this.http.post<{ item: WorkflowReview }>(
       '/workflow-reviews',
       input
     );
-    await this.notifyReviewMutation('workflows.createReview', resp.data.review.id);
-    return resp.data.review;
+    await this.notifyReviewMutation('workflows.createReview', resp.data.item.id);
+    return resp.data.item;
   }
 
   async updateReview(
@@ -320,12 +320,12 @@ export class WorkflowsService {
     input: WorkflowReviewUpdateInput
   ): Promise<WorkflowReview> {
     this.assertMutationAllowed('workflows.updateReview');
-    const resp = await this.http.put<{ review: WorkflowReview }>(
+    const resp = await this.http.put<{ item: WorkflowReview }>(
       `/workflow-reviews/${reviewId}`,
       input
     );
     await this.notifyReviewMutation('workflows.updateReview', reviewId);
-    return resp.data.review;
+    return resp.data.item;
   }
 
   async deleteReview(reviewId: string): Promise<void> {
@@ -336,11 +336,11 @@ export class WorkflowsService {
 
   async generateShareToken(reviewId: string): Promise<WorkflowReview> {
     this.assertMutationAllowed('workflows.generateShareToken');
-    const resp = await this.http.post<{ review: WorkflowReview }>(
+    const resp = await this.http.post<{ item: WorkflowReview }>(
       `/workflow-reviews/${reviewId}/share-token`
     );
     await this.notifyReviewMutation('workflows.generateShareToken', reviewId);
-    return resp.data.review;
+    return resp.data.item;
   }
 
   async revokeShareToken(reviewId: string): Promise<void> {
@@ -355,7 +355,7 @@ export class WorkflowsService {
     workflowId: string,
     query?: WorkflowReviewCommentQueryInput
   ): Promise<WorkflowReviewComment[]> {
-    const resp = await this.http.get<{ comments: WorkflowReviewComment[] }>(
+    const resp = await this.http.get<{ items: WorkflowReviewComment[] }>(
       '/workflow-reviews/comments',
       {
         params: {
@@ -366,7 +366,7 @@ export class WorkflowsService {
         },
       }
     );
-    return resp.data.comments;
+    return resp.data.items;
   }
 
   async createComment(
@@ -374,12 +374,12 @@ export class WorkflowsService {
     input: WorkflowReviewCommentCreateInput
   ): Promise<WorkflowReviewComment> {
     this.assertMutationAllowed('workflows.createComment');
-    const resp = await this.http.post<{ comment: WorkflowReviewComment }>(
+    const resp = await this.http.post<{ item: WorkflowReviewComment }>(
       `/workflow-reviews/${reviewId}/comments`,
       input
     );
     await this.notifyReviewMutation('workflows.createComment', reviewId);
-    return resp.data.comment;
+    return resp.data.item;
   }
 
   async updateComment(
@@ -388,12 +388,12 @@ export class WorkflowsService {
     input: WorkflowReviewCommentUpdateInput
   ): Promise<WorkflowReviewComment> {
     this.assertMutationAllowed('workflows.updateComment');
-    const resp = await this.http.put<{ comment: WorkflowReviewComment }>(
+    const resp = await this.http.put<{ item: WorkflowReviewComment }>(
       `/workflow-reviews/${reviewId}/comments/${commentId}`,
       input
     );
     await this.notifyReviewMutation('workflows.updateComment', reviewId);
-    return resp.data.comment;
+    return resp.data.item;
   }
 
   async deleteComment(reviewId: string, commentId: string): Promise<void> {

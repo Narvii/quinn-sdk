@@ -5,7 +5,6 @@ import {
   GroupMember,
   GroupsAddMembersInput,
   GroupsCreateInput,
-  GroupsCreateResult,
   GroupsListQuery,
   GroupsRemoveMemberInput,
   GroupsUpdateNameInput,
@@ -55,10 +54,10 @@ export class GroupsService {
     return resp.data.items;
   }
 
-  async create(input: GroupsCreateInput): Promise<GroupsCreateResult> {
+  async create(input: GroupsCreateInput): Promise<Group> {
     this.assertMutationAllowed('groups.create');
-    const resp = await this.http.post<GroupsCreateResult>('/groups', input);
-    return resp.data;
+    const resp = await this.http.post<{ item: Group }>('/groups', input);
+    return resp.data.item;
   }
 
   async updateName(input: GroupsUpdateNameInput): Promise<Group | null> {
@@ -77,10 +76,10 @@ export class GroupsService {
 
   async addMembers(input: GroupsAddMembersInput): Promise<AssignedUser[]> {
     this.assertMutationAllowed('groups.addMembers');
-    const resp = await this.http.post<{ assignedUsers: AssignedUser[] }>(`/groups/${input.groupId}/members`, {
+    const resp = await this.http.post<{ items: AssignedUser[] }>(`/groups/${input.groupId}/members`, {
       userIds: input.userIds,
     });
-    return resp.data.assignedUsers;
+    return resp.data.items;
   }
 
   async removeMember(input: GroupsRemoveMemberInput): Promise<void> {
