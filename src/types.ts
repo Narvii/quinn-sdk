@@ -468,23 +468,23 @@ export type NotificationResult = {
 export type NotificationDeliveryInput =
   | {
       channel: 'email';
-      recipient: { email: string };
+      recipient: { userId: string };
       content: { subject?: string; body: string };
     }
   | {
       channel: 'sms';
-      recipient: { phoneNumber: string };
+      recipient: { userId: string };
       content: { body: string };
     };
 
 export type SendEmailInput = {
-  to: string;
+  userId: string;
   subject?: string;
   markdown: string;
 };
 
 export type SendSmsInput = {
-  to: string;
+  userId: string;
   body: string;
 };
 

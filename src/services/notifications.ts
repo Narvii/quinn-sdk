@@ -20,7 +20,7 @@ export class NotificationsService {
     const [result] = await this.send([
       {
         channel: 'email',
-        recipient: { email: input.to },
+        recipient: { userId: input.userId },
         content: {
           subject: input.subject,
           body: input.markdown,
@@ -34,7 +34,7 @@ export class NotificationsService {
     const [result] = await this.send([
       {
         channel: 'sms',
-        recipient: { phoneNumber: input.to },
+        recipient: { userId: input.userId },
         content: { body: input.body },
       },
     ]);
