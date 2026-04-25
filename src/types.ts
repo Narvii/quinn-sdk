@@ -457,6 +457,37 @@ export interface AssignedUser {
   assigned: boolean;
 }
 
+export type NotificationResult = {
+  channel: 'email' | 'sms';
+  resolvedRecipient: string;
+  status: 'delivered' | 'failed';
+  failureReason?: string;
+  providerMessageId?: string;
+};
+
+export type NotificationDeliveryInput =
+  | {
+      channel: 'email';
+      recipient: { email: string };
+      content: { subject?: string; body: string };
+    }
+  | {
+      channel: 'sms';
+      recipient: { phoneNumber: string };
+      content: { body: string };
+    };
+
+export type SendEmailInput = {
+  to: string;
+  subject?: string;
+  markdown: string;
+};
+
+export type SendSmsInput = {
+  to: string;
+  body: string;
+};
+
 export interface CoursesAssignToUsersInput {
   courseId: string;
   userIds: string[];

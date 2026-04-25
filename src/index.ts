@@ -22,6 +22,7 @@ import { KnowledgeService } from './services/knowledge';
 import { LevelsService } from './services/levels';
 import { LocationsService } from './services/locations';
 import { MembersService } from './services/members';
+import { NotificationsService } from './services/notifications';
 import { OrganizationsService } from './services/organizations';
 import { ProgressionsService } from './services/progressions';
 import { ProgramsService } from './services/programs';
@@ -57,6 +58,7 @@ export {
   KnowledgeService,
 } from './services/knowledge';
 export { LocationsService } from './services/locations';
+export { NotificationsService } from './services/notifications';
 export { ProgressionsService } from './services/progressions';
 export { SignOffService } from './services/sign-off';
 export { WorkflowsService } from './services/workflows';
@@ -71,6 +73,7 @@ export class Quinn {
   readonly knowledge: KnowledgeService;
   readonly locations: LocationsService;
   readonly members: MembersService;
+  readonly notifications: NotificationsService;
   readonly roles: RolesService;
   readonly levels: LevelsService;
   readonly competencies: CompetenciesService;
@@ -103,6 +106,10 @@ export class Quinn {
     this.knowledge = new KnowledgeService(this.http, this.assertMutationAllowed);
     this.locations = new LocationsService(this.http, this.assertMutationAllowed);
     this.members = new MembersService(this.http, this.assertMutationAllowed);
+    this.notifications = new NotificationsService(
+      this.http,
+      this.assertMutationAllowed
+    );
     this.roles = new RolesService(this.http, this.assertMutationAllowed);
     this.levels = new LevelsService(this.http);
     this.competencies = new CompetenciesService(this.http, this.assertMutationAllowed);
