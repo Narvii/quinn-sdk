@@ -457,34 +457,30 @@ export interface AssignedUser {
   assigned: boolean;
 }
 
-export type NotificationResult = {
-  channel: 'email' | 'sms';
+export type EmailSendResult = {
+  recipientUserId: string;
   resolvedRecipient: string;
   status: 'delivered' | 'failed';
   failureReason?: string;
   providerMessageId?: string;
 };
 
-export type NotificationDeliveryInput =
-  | {
-      channel: 'email';
-      recipient: { userId: string };
-      content: { subject?: string; body: string };
-    }
-  | {
-      channel: 'sms';
-      recipient: { userId: string };
-      content: { body: string };
-    };
+export type SmsSendResult = {
+  recipientUserId: string;
+  resolvedRecipient: string;
+  status: 'delivered' | 'failed';
+  failureReason?: string;
+  providerMessageId?: string;
+};
 
-export type SendEmailInput = {
-  userId: string;
+export type EmailSendInput = {
+  recipientUserId: string;
   subject?: string;
   markdown: string;
 };
 
-export type SendSmsInput = {
-  userId: string;
+export type SmsSendInput = {
+  recipientUserId: string;
   body: string;
 };
 
