@@ -12,8 +12,11 @@ export class SmsService {
   ) {}
 
   async send(input: SmsSendInput): Promise<SmsSendResult> {
-    this.assertMutationAllowed('sms.send');
-    const resp = await this.http.post<SendSmsResponse>('/sms:send', input);
+    this.assertMutationAllowed('notifications.sms.send');
+    const resp = await this.http.post<SendSmsResponse>(
+      '/notifications/sms:send',
+      input
+    );
     return resp.data.item;
   }
 }

@@ -12,8 +12,11 @@ export class EmailService {
   ) {}
 
   async send(input: EmailSendInput): Promise<EmailSendResult> {
-    this.assertMutationAllowed('email.send');
-    const resp = await this.http.post<SendEmailResponse>('/email:send', input);
+    this.assertMutationAllowed('notifications.email.send');
+    const resp = await this.http.post<SendEmailResponse>(
+      '/notifications/email:send',
+      input
+    );
     return resp.data.item;
   }
 }
