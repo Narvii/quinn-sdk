@@ -67,6 +67,7 @@ export interface Automation {
   variables?: Record<string, unknown> | null;
   instruction: string | null;
   campaignId: string | null;
+  files?: AutomationFile[];
   template?: unknown | null;
   creatorUid: string;
   lastModifiedByUid: string;
@@ -74,6 +75,21 @@ export interface Automation {
   updatedAt: string;
   creator?: unknown | null;
   campaign?: unknown | null;
+}
+
+export interface AutomationFile {
+  path: string;
+  mime: string;
+  size: number;
+  sha256: string;
+  uploadedAt: string;
+  downloadUrl: string;
+}
+
+export interface AutomationFileUploadInput {
+  path: string;
+  contentBase64: string;
+  mime?: string;
 }
 
 export interface AutomationRun {
@@ -100,6 +116,7 @@ export interface AutomationsCreateInput {
   instruction: string;
   trigger: AutomationTrigger;
   isEnabled?: boolean;
+  files?: AutomationFileUploadInput[];
 }
 
 export interface AutomationsUpdateInput {
