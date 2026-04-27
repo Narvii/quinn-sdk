@@ -2,6 +2,7 @@ import { AxiosInstance } from 'axios';
 import { type QuinnMutationReceipt } from '../mutations';
 import {
   Automation,
+  AutomationFileUploadInput,
   AutomationRun,
   AutomationRunsListQuery,
   AutomationsCreateInput,
@@ -36,6 +37,7 @@ export class AutomationsService {
       instruction: input.instruction,
       trigger: input.trigger,
       isEnabled: input.isEnabled ?? true,
+      files: input.files,
     });
     await this.notifyAutomationMutation(
       'automations.create',
@@ -61,6 +63,29 @@ export class AutomationsService {
     this.assertMutationAllowed('automations.delete');
     await this.http.delete(`/automations/${automationId}`);
     await this.notifyAutomationMutation('automations.delete', automationId);
+  }
+
+  async putFile(
+    automationId: string,
+    input: AutomationFileUploadInput
+  ): Promise<Automation> {
+    this.assertMutationAllowed('automations.putFile');
+    const resp = await this.http.post<{ item: Automation }>(
+      `/automations/${automationId}/files`,
+      input
+    );
+    await this.notifyAutomationMutation('automations.putFile', automationId);
+    return resp.data.item;
+  }
+
+  async deleteFile(automationId: string, path: string): Promise<Automation> {
+    this.assertMutationAllowed('automations.deleteFile');
+    const resp = await this.http.delete<{ item: Automation }>(
+      `/automations/${automationId}/files`,
+      { params: { path } }
+    );
+    await this.notifyAutomationMutation('automations.deleteFile', automationId);
+    return resp.data.item;
   }
 
   async run(automationId: string): Promise<AutomationRun> {
