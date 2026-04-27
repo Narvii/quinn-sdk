@@ -16,20 +16,18 @@ import { AssessmentsService } from './services/assessments';
 import { AssignmentsService } from './services/assignments';
 import { CompetenciesService } from './services/competencies';
 import { CoursesService } from './services/courses';
-import { EmailService } from './services/email';
 import { EndorsementsService } from './services/endorsements';
 import { GroupsService } from './services/groups';
 import { KnowledgeService } from './services/knowledge';
 import { LevelsService } from './services/levels';
 import { LocationsService } from './services/locations';
 import { MembersService } from './services/members';
-import { NotificationsService } from './services/notifications';
+import { NotificationService } from './services/notification';
 import { OrganizationsService } from './services/organizations';
 import { ProgressionsService } from './services/progressions';
 import { ProgramsService } from './services/programs';
 import { RolesService } from './services/roles';
 import { SignOffService } from './services/sign-off';
-import { SmsService } from './services/sms';
 import { WorkflowsService } from './services/workflows';
 
 export * from './types';
@@ -54,17 +52,15 @@ export { QuinnMutationGuardError } from './mutation-access';
 export { AutomationsService } from './services/automations';
 export { AssessmentsService } from './services/assessments';
 export { AuthoringService } from './services/authoring';
-export { EmailService } from './services/email';
 export {
   KnowledgeDocumentsService,
   KnowledgeFoldersService,
   KnowledgeService,
 } from './services/knowledge';
 export { LocationsService } from './services/locations';
-export { NotificationsService } from './services/notifications';
+export { NotificationService } from './services/notification';
 export { ProgressionsService } from './services/progressions';
 export { SignOffService } from './services/sign-off';
-export { SmsService } from './services/sms';
 export { WorkflowsService } from './services/workflows';
 
 export class Quinn {
@@ -77,7 +73,7 @@ export class Quinn {
   readonly knowledge: KnowledgeService;
   readonly locations: LocationsService;
   readonly members: MembersService;
-  readonly notifications: NotificationsService;
+  readonly notification: NotificationService;
   readonly roles: RolesService;
   readonly levels: LevelsService;
   readonly competencies: CompetenciesService;
@@ -110,7 +106,7 @@ export class Quinn {
     this.knowledge = new KnowledgeService(this.http, this.assertMutationAllowed);
     this.locations = new LocationsService(this.http, this.assertMutationAllowed);
     this.members = new MembersService(this.http, this.assertMutationAllowed);
-    this.notifications = new NotificationsService(
+    this.notification = new NotificationService(
       this.http,
       this.assertMutationAllowed
     );
