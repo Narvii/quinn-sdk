@@ -20,10 +20,6 @@ export interface Organization {
   } | null;
 }
 
-export interface OrganizationDetails {
-  organization: Organization | null;
-}
-
 export interface OrganizationUpdateInput {
   name?: string;
   logoMediaId?: string;
@@ -461,6 +457,27 @@ export interface AssignedUser {
   assigned: boolean;
 }
 
+export type EmailSendResult = {
+  status: 'delivered' | 'failed';
+  failureReason?: string;
+};
+
+export type SmsSendResult = {
+  status: 'delivered' | 'failed';
+  failureReason?: string;
+};
+
+export type EmailSendInput = {
+  recipientUserId: string;
+  subject?: string;
+  markdown: string;
+};
+
+export type SmsSendInput = {
+  recipientUserId: string;
+  body: string;
+};
+
 export interface CoursesAssignToUsersInput {
   courseId: string;
   userIds: string[];
@@ -668,11 +685,6 @@ export interface GroupMember {
 export interface GroupsCreateInput {
   name: string;
   userIds?: string[];
-}
-
-export interface GroupsCreateResult {
-  group: Group;
-  assignedUsers: AssignedUser[];
 }
 
 export interface GroupsUpdateNameInput {

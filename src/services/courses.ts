@@ -65,14 +65,14 @@ export class CoursesService {
 
   async assignToUsers(input: CoursesAssignToUsersInput): Promise<AssignedUser[]> {
     this.assertMutationAllowed('courses.assignToUsers');
-    const resp = await this.http.post<{ assignedUsers: AssignedUser[] }>(
+    const resp = await this.http.post<{ items: AssignedUser[] }>(
       `/courses/${input.courseId}/assign/users`,
       {
         userIds: input.userIds,
         dueDateConfig: input.dueDateConfig,
       }
     );
-    return resp.data.assignedUsers;
+    return resp.data.items;
   }
 
   async assignToGroups(input: CoursesAssignToGroupsInput): Promise<void> {

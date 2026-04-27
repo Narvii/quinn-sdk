@@ -107,12 +107,12 @@ export class KnowledgeFoldersService {
 
   async list(
     query: KnowledgeFoldersListQuery = {}
-  ): Promise<{ items: KnowledgeFolder[] }> {
+  ): Promise<KnowledgeFolder[]> {
     const resp = await this.http.get<{ items: KnowledgeFolder[] }>(
       '/knowledge/folders',
       { params: query }
     );
-    return resp.data;
+    return resp.data.items;
   }
 
   async get(id: string): Promise<KnowledgeFolder | null> {
