@@ -458,19 +458,13 @@ export interface AssignedUser {
 }
 
 export type EmailSendResult = {
-  recipientUserId: string;
-  resolvedRecipient: string;
   status: 'delivered' | 'failed';
   failureReason?: string;
-  providerMessageId?: string;
 };
 
 export type SmsSendResult = {
-  recipientUserId: string;
-  resolvedRecipient: string;
   status: 'delivered' | 'failed';
   failureReason?: string;
-  providerMessageId?: string;
 };
 
 export type EmailSendInput = {
