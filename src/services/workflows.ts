@@ -13,6 +13,8 @@ import {
   type WorkflowValidationResult,
   type WorkflowVersionValidateInput,
   type WorkflowVersion,
+  type WorkflowVersionCreateInput,
+  type WorkflowVersionPublishInput,
   type WorkflowVersionSummary,
   type WorkflowCollection,
   type WorkflowCollectionCreateInput,
@@ -116,11 +118,20 @@ export class WorkflowsService {
   }
 
   // Ensures there is a single active editable draft for the workflow.
-  async createVersion(workflowId: string): Promise<WorkflowVersion> {
+  // Drafts are content-only — `changeNote` is set at publish time, not here.
+  async createVersion(
+    workflowId: string,
+    input: WorkflowVersionCreateInput = {}
+  ): Promise<WorkflowVersion> {
     this.assertMutationAllowed('workflows.createVersion');
     const resp = await this.http.post<{ item: WorkflowVersion }>(
       `/workflows/${workflowId}/versions`,
-      {}
+      {
+        sourceVersionId: input.sourceVersionId,
+        asl: input.asl,
+        bindings: input.bindings,
+        authoring: input.authoring,
+      }
     );
     await this.notifyWorkflowVersionMutation(
       'workflows.createVersion',
@@ -179,11 +190,15 @@ export class WorkflowsService {
 
   async publishVersion(
     workflowId: string,
-    versionId: string
+    versionId: string,
+    input: WorkflowVersionPublishInput = {}
   ): Promise<WorkflowPublishResult> {
     this.assertMutationAllowed('workflows.publishVersion');
     const resp = await this.http.post<{ item: WorkflowPublishResult }>(
-      `/workflows/${workflowId}/versions/${versionId}/publish`
+      `/workflows/${workflowId}/versions/${versionId}/publish`,
+      {
+        changeNote: input.changeNote,
+      }
     );
     await this.notifyWorkflowVersionMutation(
       'workflows.publishVersion',

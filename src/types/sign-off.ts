@@ -42,6 +42,7 @@ export interface SignOffFormVersion {
   version: number;
   status: SignOffFormVersionStatus;
   publishedAt: string;
+  changeNote: string | null;
   htmlS3Path: string;
   htmlUrl: string;
   inputDefs: SignOffInputDef[];
@@ -170,6 +171,7 @@ export interface CreateSignOffFormInput {
     inputDefs: SignOffInputDef[];
     schema: SignOffFieldDef[];
     html: string;
+    changeNote?: string | null;
   };
 }
 
@@ -183,6 +185,7 @@ export interface CreateSignOffFormVersionInput {
   inputDefs: SignOffInputDef[];
   schema: SignOffFieldDef[];
   html: string;
+  changeNote?: string | null;
 }
 
 export interface CreateSignOffAssignmentInput {

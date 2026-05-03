@@ -48,7 +48,14 @@ export class SignOffService {
     const resp = await this.http.post<{ item: SignOffForm }>('/sign-offs', {
       name: input.name,
       description: input.description,
-      initialVersion: input.initialVersion,
+      initialVersion: input.initialVersion
+        ? {
+            inputDefs: input.initialVersion.inputDefs,
+            schema: input.initialVersion.schema,
+            html: input.initialVersion.html,
+            changeNote: input.initialVersion.changeNote,
+          }
+        : undefined,
     });
     await this.notifyFormMutation('signOff.create', resp.data.item.id);
     return resp.data.item;
@@ -80,6 +87,7 @@ export class SignOffService {
         inputDefs: input.inputDefs,
         schema: input.schema,
         html: input.html,
+        changeNote: input.changeNote,
       }
     );
     await this.notifyFormMutation('signOff.createVersion', formId);
