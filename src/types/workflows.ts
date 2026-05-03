@@ -95,6 +95,7 @@ export interface WorkflowVersionSummary {
   status: WorkflowVersionStatus;
   sfnArn: string | null;
   publishedAt: string | null;
+  changeNote: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -123,6 +124,7 @@ export interface WorkflowVersion {
   status: WorkflowVersionStatus;
   sfnArn: string | null;
   publishedAt: string | null;
+  changeNote: string | null;
   createdAt: string;
   updatedAt: string;
   asl: WorkflowDocument;
@@ -225,6 +227,17 @@ export interface WorkflowDraftVersionInput {
   bindings?: WorkflowBindings;
   authoring?: WorkflowAuthoring | null;
   triggers?: WorkflowDraftTriggerInput[];
+}
+
+export interface WorkflowVersionCreateInput {
+  sourceVersionId?: string;
+  asl?: WorkflowDocument;
+  bindings?: WorkflowBindings;
+  authoring?: WorkflowAuthoring | null;
+}
+
+export interface WorkflowVersionPublishInput {
+  changeNote?: string | null;
 }
 
 export interface WorkflowVersionValidateInput {
