@@ -292,6 +292,14 @@ export interface WorkflowReview {
   shareToken: string | null;
   pinnedVersions: Record<string, string> | null;
   scenes: WorkflowReviewScene[];
+  /**
+   * Customer-facing labels for the cross-cluster trigger edges in the
+   * walkthrough canvas, keyed by triggerId (from the pinned workflow version's
+   * `triggers[].id`).
+   *
+   * Walkthrough-only metadata — does not affect the runtime trigger config.
+   */
+  triggerLabels: Record<string, string> | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -308,6 +316,7 @@ export interface WorkflowReviewUpdateInput {
   description?: string | null;
   pinnedVersions?: Record<string, string> | null;
   scenes?: WorkflowReviewScene[] | null;
+  triggerLabels?: Record<string, string> | null;
 }
 
 // --- Workflow Review Comments ---
