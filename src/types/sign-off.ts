@@ -22,6 +22,17 @@ export type SignOffAssignmentStatus = 'pending' | 'completed' | 'cancelled';
 
 export type SignOffSubmissionStatus = 'draft' | 'submitted' | 'rejected';
 
+export type SignOffOptionSourceKind =
+  | 'member'
+  | 'location'
+  | 'job_title'
+  | 'learning_group'
+  | 'course';
+
+export interface SignOffOptionSource {
+  kind: SignOffOptionSourceKind;
+}
+
 export interface SignOffInputDef {
   name: string;
   type: SignOffInputType;
@@ -34,6 +45,7 @@ export interface SignOffFieldDef {
   label: string;
   required?: boolean;
   options?: string[];
+  optionSource?: SignOffOptionSource;
 }
 
 export interface SignOffFormVersion {
