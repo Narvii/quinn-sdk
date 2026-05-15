@@ -34,6 +34,7 @@ export class AutomationsService {
     this.assertMutationAllowed('automations.create');
     const resp = await this.http.post<{ item: Automation }>('/automations', {
       name: input.name,
+      description: input.description,
       instruction: input.instruction,
       trigger: input.trigger,
       isEnabled: input.isEnabled ?? true,

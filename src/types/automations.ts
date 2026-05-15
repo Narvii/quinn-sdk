@@ -37,6 +37,7 @@ export interface Automation {
   trigger: AutomationTrigger;
   templateKey: string | null;
   variables?: Record<string, unknown> | null;
+  description: string | null;
   instruction: string | null;
   campaignId: string | null;
   files?: AutomationFile[];
@@ -85,6 +86,7 @@ export interface AutomationsListQuery {
 
 export interface AutomationsCreateInput {
   name: string;
+  description?: string;
   instruction: string;
   trigger: AutomationTrigger;
   isEnabled?: boolean;
@@ -93,6 +95,7 @@ export interface AutomationsCreateInput {
 
 export interface AutomationsUpdateInput {
   name?: string;
+  description?: string;
   instruction?: string;
   trigger?: AutomationTrigger;
   isEnabled?: boolean;
