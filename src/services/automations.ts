@@ -38,6 +38,7 @@ export class AutomationsService {
       instruction: input.instruction,
       trigger: input.trigger,
       isEnabled: input.isEnabled ?? true,
+      preflight: input.preflight,
       files: input.files,
     });
     await this.notifyAutomationMutation(

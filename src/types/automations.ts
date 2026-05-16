@@ -39,6 +39,7 @@ export interface Automation {
   variables?: Record<string, unknown> | null;
   description: string | null;
   instruction: string | null;
+  preflight?: AutomationPreflightConfig | null;
   campaignId: string | null;
   files?: AutomationFile[];
   template?: unknown | null;
@@ -75,9 +76,22 @@ export interface AutomationRun {
   triggerKind: AutomationRunTriggerKind;
   status: AutomationRunStatus;
   sessionId?: string | null;
+  sandboxId?: string | null;
   sandboxStatus?: string | null;
   lastActiveAt?: string | null;
   errorInfo?: Record<string, unknown> | null;
+  preflightResult?: AutomationPreflightResult | null;
+}
+
+export interface AutomationPreflightConfig {
+  enabled: boolean;
+  scriptPath: string;
+  timeoutMs?: number | null;
+}
+
+export interface AutomationPreflightResult {
+  wakeAgent: boolean;
+  message: string;
 }
 
 export interface AutomationsListQuery {
@@ -90,6 +104,7 @@ export interface AutomationsCreateInput {
   instruction: string;
   trigger: AutomationTrigger;
   isEnabled?: boolean;
+  preflight?: AutomationPreflightConfig | null;
   files?: AutomationFileUploadInput[];
 }
 
@@ -99,6 +114,7 @@ export interface AutomationsUpdateInput {
   instruction?: string;
   trigger?: AutomationTrigger;
   isEnabled?: boolean;
+  preflight?: AutomationPreflightConfig | null;
 }
 
 export interface AutomationRunsListQuery {
