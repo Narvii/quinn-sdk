@@ -17,4 +17,5 @@ export * from './knowledge';
 export * from './sign-off';
 export * from './notification';
 export * from './authoring';
+export * from './skills';
 export * from './workflows';

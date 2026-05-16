@@ -28,6 +28,7 @@ import { ProgressionsService } from './services/progressions';
 import { ProgramsService } from './services/programs';
 import { RolesService } from './services/roles';
 import { SignOffService } from './services/sign-off';
+import { SkillsService } from './services/skills';
 import { WorkflowsService } from './services/workflows';
 
 export * from './types';
@@ -61,6 +62,7 @@ export { LocationsService } from './services/locations';
 export { NotificationService } from './services/notification';
 export { ProgressionsService } from './services/progressions';
 export { SignOffService } from './services/sign-off';
+export { SkillsService } from './services/skills';
 export { WorkflowsService } from './services/workflows';
 
 export class Quinn {
@@ -83,6 +85,7 @@ export class Quinn {
   readonly groups: GroupsService;
   readonly programs: ProgramsService;
   readonly endorsements: EndorsementsService;
+  readonly skills: SkillsService;
   readonly signOff: SignOffService;
   readonly workflows: WorkflowsService;
 
@@ -119,6 +122,7 @@ export class Quinn {
     this.groups = new GroupsService(this.http, this.assertMutationAllowed);
     this.programs = new ProgramsService(this.http, this.assertMutationAllowed);
     this.endorsements = new EndorsementsService(this.http, this.assertMutationAllowed);
+    this.skills = new SkillsService(this.http, this.assertMutationAllowed);
     this.signOff = new SignOffService(
       this.http,
       this.assertMutationAllowed,
