@@ -14,6 +14,7 @@ export * from './assessments';
 export * from './groups';
 export * from './locations';
 export * from './knowledge';
+export * from './files';
 export * from './sign-off';
 export * from './notification';
 export * from './authoring';

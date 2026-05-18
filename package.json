@@ -1,9 +1,12 @@
 {
   "name": "@kaizenlabs/quinn-sdk",
-  "version": "1.14.0",
+  "version": "1.15.0",
   "description": "TypeScript SDK for Quinn Platform API.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "quinn": "dist/cli.js"
+  },
   "files": [
     "dist"
   ],

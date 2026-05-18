@@ -17,6 +17,7 @@ import { AssignmentsService } from './services/assignments';
 import { CompetenciesService } from './services/competencies';
 import { CoursesService } from './services/courses';
 import { EndorsementsService } from './services/endorsements';
+import { FilesService } from './services/files';
 import { GroupsService } from './services/groups';
 import { KnowledgeService } from './services/knowledge';
 import { LevelsService } from './services/levels';
@@ -52,6 +53,7 @@ export { QuinnMutationGuardError } from './mutation-access';
 export { AutomationsService } from './services/automations';
 export { AssessmentsService } from './services/assessments';
 export { AuthoringService } from './services/authoring';
+export { FilesService } from './services/files';
 export {
   KnowledgeDocumentsService,
   KnowledgeFoldersService,
@@ -83,6 +85,7 @@ export class Quinn {
   readonly groups: GroupsService;
   readonly programs: ProgramsService;
   readonly endorsements: EndorsementsService;
+  readonly files: FilesService;
   readonly signOff: SignOffService;
   readonly workflows: WorkflowsService;
 
@@ -119,6 +122,7 @@ export class Quinn {
     this.groups = new GroupsService(this.http, this.assertMutationAllowed);
     this.programs = new ProgramsService(this.http, this.assertMutationAllowed);
     this.endorsements = new EndorsementsService(this.http, this.assertMutationAllowed);
+    this.files = new FilesService(this.http);
     this.signOff = new SignOffService(
       this.http,
       this.assertMutationAllowed,

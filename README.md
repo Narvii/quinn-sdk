@@ -24,6 +24,23 @@ const signOff = await quinn.signOff.list({ limit: 10 });
 console.log(org.organization?.name, members.items.length, signOff.items.length);
 ```
 
+File capabilities:
+
+```ts
+const transcript = await quinn.files.transcribeAudio({
+  path: "/mnt/uploads/call.mp3",
+  outputPath: "/mnt/tool_results/call.transcript.md",
+});
+
+console.log(transcript.contentPath, transcript.preview);
+```
+
+CLI:
+
+```bash
+quinn files transcribe-audio /mnt/uploads/call.mp3 --out /mnt/tool_results/call.transcript.md
+```
+
 ## Configuration
 
 `new Quinn()` resolves configuration in this order:
