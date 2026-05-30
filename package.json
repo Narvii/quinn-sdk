@@ -12,11 +12,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Narvii/quinn-sdk.git"
+    "url": "git+https://github.com/MeetQuinn/quinn-sdk.git"
   },
-  "homepage": "https://github.com/Narvii/quinn-sdk#readme",
+  "homepage": "https://github.com/MeetQuinn/quinn-sdk#readme",
   "bugs": {
-    "url": "https://github.com/Narvii/quinn-sdk/issues"
+    "url": "https://github.com/MeetQuinn/quinn-sdk/issues"
   },
   "license": "Apache-2.0",
   "scripts": {
