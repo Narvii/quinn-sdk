@@ -29,6 +29,7 @@ import { ProgramsService } from './services/programs';
 import { RolesService } from './services/roles';
 import { SignOffService } from './services/sign-off';
 import { WorkflowsService } from './services/workflows';
+import { PathsService } from './services/paths';
 
 export * from './types';
 export {
@@ -62,6 +63,7 @@ export { NotificationService } from './services/notification';
 export { ProgressionsService } from './services/progressions';
 export { SignOffService } from './services/sign-off';
 export { WorkflowsService } from './services/workflows';
+export { PathsService } from './services/paths';
 
 export class Quinn {
   private readonly config: QuinnResolvedConfig;
@@ -85,6 +87,7 @@ export class Quinn {
   readonly endorsements: EndorsementsService;
   readonly signOff: SignOffService;
   readonly workflows: WorkflowsService;
+  readonly paths: PathsService;
 
   constructor(config: QuinnClientConfig = {}) {
     this.config = resolveQuinnConfig(config);
@@ -125,6 +128,11 @@ export class Quinn {
       this.notifyMutationCommitted
     );
     this.workflows = new WorkflowsService(
+      this.http,
+      this.assertMutationAllowed,
+      this.notifyMutationCommitted
+    );
+    this.paths = new PathsService(
       this.http,
       this.assertMutationAllowed,
       this.notifyMutationCommitted

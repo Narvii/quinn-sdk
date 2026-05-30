@@ -5,7 +5,10 @@ export type QuinnAffectedResourceType =
   | 'automation'
   | 'automation-run'
   | 'workflow-collection'
-  | 'workflow-review';
+  | 'workflow-review'
+  | 'adaptive-path'
+  | 'adaptive-path-version'
+  | 'adaptive-path-rule';
 
 export interface QuinnAffectedResource {
   type: QuinnAffectedResourceType;

@@ -18,3 +18,4 @@ export * from './sign-off';
 export * from './notification';
 export * from './authoring';
 export * from './workflows';
+export * from './paths';
