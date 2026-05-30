@@ -72,7 +72,12 @@ export type MemberCustomFieldType =
   | 'number'
   | 'boolean'
   | 'date'
-  | 'string_list';
+  | 'datetime'
+  | 'string_list'
+  | 'ordered_list'
+  | 'field_group'
+  | 'user_picker_org'
+  | 'user_picker_internal';
 
 export interface MemberCustomFieldDefinition {
   id: string;
