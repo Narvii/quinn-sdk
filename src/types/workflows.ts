@@ -103,6 +103,7 @@ export interface WorkflowVersionSummary {
 export interface WorkflowSummary {
   id: string;
   orgId: string;
+  key: string | null;
   name: string;
   description: string | null;
   status: WorkflowStatus;
@@ -210,11 +211,13 @@ export interface WorkflowRun {
 export interface WorkflowCreateInput {
   name: string;
   description?: string | null;
+  key?: string;
 }
 
 export interface WorkflowUpdateInput {
   name?: string | null;
   description?: string | null;
+  key?: string | null;
 }
 
 export interface WorkflowDraftTriggerInput {

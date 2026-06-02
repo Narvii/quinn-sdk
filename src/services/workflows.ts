@@ -55,6 +55,7 @@ export class WorkflowsService {
     const resp = await this.http.post<{ item: WorkflowDetail }>('/workflows', {
       name: input.name,
       description: input.description,
+      key: input.key,
     });
     await this.notifyWorkflowMutation('workflows.create', resp.data.item.id);
     return resp.data.item;
@@ -70,6 +71,7 @@ export class WorkflowsService {
       {
         name: input.name,
         description: input.description,
+        key: input.key,
       }
     );
     await this.notifyWorkflowMutation('workflows.update', workflowId);
