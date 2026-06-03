@@ -84,12 +84,18 @@ export interface MemberCustomFieldDefinition {
   key: string;
   label: string;
   type: MemberCustomFieldType;
+  // Type-specific configuration. For `field_group`, holds the sub-field schema
+  // (e.g. `{ subFields: [{ name, type }] }`). Null/absent for simple types.
+  config: unknown;
 }
 
 export interface MembersCreateCustomFieldDefinitionInput {
   key: string;
   label: string;
   type: MemberCustomFieldType;
+  // Type-specific configuration. Required for `field_group` to declare its
+  // sub-fields (e.g. `{ subFields: [{ name, type }] }`).
+  config?: unknown;
 }
 
 export interface MemberCustomFieldValue {
