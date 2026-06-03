@@ -12,7 +12,8 @@ export type SignOffFieldType =
   | 'dropdown'
   | 'boolean'
   | 'file'
-  | 'signature';
+  | 'signature'
+  | 'field_group';
 
 export type SignOffFormStatus = 'active' | 'archived';
 
@@ -39,6 +40,11 @@ export interface SignOffInputDef {
   label: string;
 }
 
+export interface SignOffSubFieldDef {
+  name: string;
+  type: 'string' | 'number' | 'boolean' | 'date' | 'datetime';
+}
+
 export interface SignOffFieldDef {
   name: string;
   type: SignOffFieldType;
@@ -46,6 +52,10 @@ export interface SignOffFieldDef {
   required?: boolean;
   options?: string[];
   optionSource?: SignOffOptionSource;
+  // Lists the scalar sub-fields of a field_group form field (object_array
+  // submission value), matching api-service. Only meaningful when
+  // type === 'field_group'.
+  subFields?: SignOffSubFieldDef[];
 }
 
 export interface SignOffFormVersion {
