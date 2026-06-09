@@ -5,7 +5,9 @@ export type QuinnAffectedResourceType =
   | 'automation'
   | 'automation-run'
   | 'workflow-collection'
-  | 'workflow-review';
+  | 'workflow-review'
+  | 'workflow-lookup'
+  | 'workflow-lookup-version';
 
 export interface QuinnAffectedResource {
   type: QuinnAffectedResourceType;

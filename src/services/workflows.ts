@@ -26,6 +26,14 @@ import {
   type WorkflowReviewCommentCreateInput,
   type WorkflowReviewCommentUpdateInput,
   type WorkflowReviewCommentQueryInput,
+  type WorkflowLookupActivateInput,
+  type WorkflowLookupCreateInput,
+  type WorkflowLookupDefinition,
+  type WorkflowLookupDetail,
+  type WorkflowLookupPreviewInput,
+  type WorkflowLookupPreviewResult,
+  type WorkflowLookupSaveDraftInput,
+  type WorkflowLookupVersion,
 } from '../types';
 import { type QuinnMutationReceipt } from '../mutations';
 
@@ -419,6 +427,151 @@ export class WorkflowsService {
       `/workflow-reviews/${reviewId}/comments/${commentId}`
     );
     await this.notifyReviewMutation('workflows.deleteComment', reviewId);
+  }
+
+  // --- Workflow Lookups ---
+  //
+  // Org-admin authored, dry-runnable subject→target-ref lookups. The typical
+  // authoring loop is: createLookup → saveLookupDraft → previewLookup (must
+  // succeed) → activateLookup. archiveLookup retires a definition.
+
+  async listLookups(): Promise<WorkflowLookupDefinition[]> {
+    const resp = await this.http.get<{ definitions: WorkflowLookupDefinition[] }>(
+      '/workflow-lookups'
+    );
+    return resp.data.definitions;
+  }
+
+  async getLookup(kind: string, key: string): Promise<WorkflowLookupDetail> {
+    const resp = await this.http.get<WorkflowLookupDetail>(
+      `/workflow-lookups/${encodeURIComponent(kind)}/${encodeURIComponent(key)}`
+    );
+    return resp.data;
+  }
+
+  // Creates a lookup definition with an empty draft.
+  async createLookup(
+    input: WorkflowLookupCreateInput
+  ): Promise<WorkflowLookupDetail> {
+    this.assertMutationAllowed('workflows.createLookup');
+    const resp = await this.http.post<WorkflowLookupDetail>(
+      '/workflow-lookups',
+      {
+        kind: input.kind,
+        key: input.key,
+      }
+    );
+    await this.notifyLookupMutation(
+      'workflows.createLookup',
+      resp.data.definition.id
+    );
+    return resp.data;
+  }
+
+  // Saves the draft script (and optional contracts/config); re-validates the
+  // script server-side. Resets the recorded preview, so a fresh successful
+  // previewLookup is required before the draft can be activated again.
+  async saveLookupDraft(
+    kind: string,
+    key: string,
+    input: WorkflowLookupSaveDraftInput
+  ): Promise<WorkflowLookupVersion> {
+    this.assertMutationAllowed('workflows.saveLookupDraft');
+    const resp = await this.http.put<WorkflowLookupVersion>(
+      `/workflow-lookups/${encodeURIComponent(kind)}/${encodeURIComponent(key)}/draft`,
+      {
+        scriptCode: input.scriptCode,
+        inputContract: input.inputContract,
+        outputContract: input.outputContract,
+        executionConfig: input.executionConfig,
+      }
+    );
+    await this.notifyLookupVersionMutation(
+      'workflows.saveLookupDraft',
+      resp.data.id
+    );
+    return resp.data;
+  }
+
+  // Dry-runs the draft script against a subject. A successful run is recorded
+  // and unlocks activation. This is a read-style probe (no business mutation),
+  // so it is not mutation-guarded.
+  async previewLookup(
+    kind: string,
+    key: string,
+    input: WorkflowLookupPreviewInput
+  ): Promise<WorkflowLookupPreviewResult> {
+    const resp = await this.http.post<WorkflowLookupPreviewResult>(
+      `/workflow-lookups/${encodeURIComponent(kind)}/${encodeURIComponent(key)}/preview`,
+      {
+        subjectId: input.subjectId,
+      }
+    );
+    return resp.data;
+  }
+
+  // Activates the draft (or a specified version). Requires a compiled script
+  // and a recorded successful preview for the draft.
+  async activateLookup(
+    kind: string,
+    key: string,
+    input: WorkflowLookupActivateInput = {}
+  ): Promise<WorkflowLookupDetail> {
+    this.assertMutationAllowed('workflows.activateLookup');
+    const resp = await this.http.post<WorkflowLookupDetail>(
+      `/workflow-lookups/${encodeURIComponent(kind)}/${encodeURIComponent(key)}/activate`,
+      {
+        versionId: input.versionId,
+      }
+    );
+    await this.notifyLookupMutation(
+      'workflows.activateLookup',
+      resp.data.definition.id
+    );
+    return resp.data;
+  }
+
+  // Archives a lookup definition (soft retire, no hard delete).
+  async archiveLookup(
+    kind: string,
+    key: string
+  ): Promise<WorkflowLookupDefinition> {
+    this.assertMutationAllowed('workflows.archiveLookup');
+    const resp = await this.http.post<WorkflowLookupDefinition>(
+      `/workflow-lookups/${encodeURIComponent(kind)}/${encodeURIComponent(key)}/archive`
+    );
+    await this.notifyLookupMutation('workflows.archiveLookup', resp.data.id);
+    return resp.data;
+  }
+
+  private async notifyLookupMutation(
+    operation: string,
+    lookupId: string
+  ): Promise<void> {
+    await this.notifyMutationCommitted?.({
+      operation,
+      affectedResources: [
+        {
+          type: 'workflow-lookup',
+          id: lookupId,
+        },
+      ],
+    });
+  }
+
+  private async notifyLookupVersionMutation(
+    operation: string,
+    versionId: string
+  ): Promise<void> {
+    await this.notifyMutationCommitted?.({
+      operation,
+      affectedResources: [
+        {
+          type: 'workflow-lookup-version',
+          id: versionId,
+        },
+      ],
+    });
   }
 
   private async notifyCollectionMutation(
