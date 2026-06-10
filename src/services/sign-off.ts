@@ -53,6 +53,9 @@ export class SignOffService {
             inputDefs: input.initialVersion.inputDefs,
             schema: input.initialVersion.schema,
             html: input.initialVersion.html,
+            managerHtml: input.initialVersion.managerHtml,
+            managerSchema: input.initialVersion.managerSchema,
+            completionBinding: input.initialVersion.completionBinding,
             changeNote: input.initialVersion.changeNote,
           }
         : undefined,
@@ -87,6 +90,9 @@ export class SignOffService {
         inputDefs: input.inputDefs,
         schema: input.schema,
         html: input.html,
+        managerHtml: input.managerHtml,
+        managerSchema: input.managerSchema,
+        completionBinding: input.completionBinding,
         changeNote: input.changeNote,
       }
     );
