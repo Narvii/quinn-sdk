@@ -58,6 +58,27 @@ export interface SignOffFieldDef {
   subFields?: SignOffSubFieldDef[];
 }
 
+export type CompletionBindingType =
+  | 'explicit_buttons'
+  | 'field_value'
+  | 'score_threshold';
+
+export interface CompletionBindingButton {
+  label: string;
+  outcome: string;
+}
+
+export interface CompletionBinding {
+  type: CompletionBindingType;
+  buttons?: CompletionBindingButton[];
+  fieldId?: string;
+  mapping?: Record<string, string>;
+  scoreFieldId?: string;
+  threshold?: number;
+  passOutcome?: string;
+  failOutcome?: string;
+}
+
 export interface SignOffFormVersion {
   id: string;
   formId: string;
@@ -69,6 +90,10 @@ export interface SignOffFormVersion {
   htmlUrl: string;
   inputDefs: SignOffInputDef[];
   schema: SignOffFieldDef[];
+  managerHtmlS3Path?: string | null;
+  managerHtmlUrl?: string | null;
+  managerSchema?: SignOffFieldDef[] | null;
+  completionBinding?: CompletionBinding | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -193,6 +218,9 @@ export interface CreateSignOffFormInput {
     inputDefs: SignOffInputDef[];
     schema: SignOffFieldDef[];
     html: string;
+    managerHtml?: string | null;
+    managerSchema?: SignOffFieldDef[] | null;
+    completionBinding?: CompletionBinding | null;
     changeNote?: string | null;
   };
 }
@@ -207,6 +235,9 @@ export interface CreateSignOffFormVersionInput {
   inputDefs: SignOffInputDef[];
   schema: SignOffFieldDef[];
   html: string;
+  managerHtml?: string | null;
+  managerSchema?: SignOffFieldDef[] | null;
+  completionBinding?: CompletionBinding | null;
   changeNote?: string | null;
 }
 
