@@ -368,3 +368,84 @@ export interface WorkflowReviewCommentQueryInput {
   nodeId?: string;
   status?: WorkflowReviewCommentStatus;
 }
+
+// --- Workflow Lookups ---
+//
+// Org-admin authored, dry-runnable lookups that resolve a subject to one or
+// more target refs at workflow runtime. A lookup definition owns a single
+// editable draft plus an immutable version history; a draft must record a
+// successful preview before it can be activated.
+
+export type WorkflowLookupStatus = 'active' | 'archived';
+
+export type WorkflowLookupVersionStatus = 'draft' | 'active' | 'archived';
+
+/** Free-form JSON contract/config blobs attached to a lookup version. */
+export type WorkflowLookupContract = Record<string, unknown>;
+export type WorkflowLookupExecutionConfig = Record<string, unknown>;
+
+export interface WorkflowLookupDefinition {
+  id: string;
+  kind: string;
+  key: string;
+  status: WorkflowLookupStatus;
+  activeVersion: number;
+  activeVersionId: string;
+  hasDraft: boolean;
+}
+
+export interface WorkflowLookupVersion {
+  id: string;
+  version: number;
+  status: WorkflowLookupVersionStatus;
+  scriptCode: string;
+  scriptHash: string;
+  inputContract: WorkflowLookupContract | null;
+  outputContract: WorkflowLookupContract | null;
+  executionConfig: WorkflowLookupExecutionConfig | null;
+  previewOk: boolean;
+  lastPreviewOkHash: string;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WorkflowLookupDetail {
+  definition: WorkflowLookupDefinition;
+  activeVersion: WorkflowLookupVersion | null;
+  draftVersion: WorkflowLookupVersion | null;
+  versions: WorkflowLookupVersion[];
+}
+
+export interface WorkflowLookupCreateInput {
+  kind: string;
+  key: string;
+}
+
+export interface WorkflowLookupSaveDraftInput {
+  scriptCode: string;
+  inputContract?: WorkflowLookupContract | null;
+  outputContract?: WorkflowLookupContract | null;
+  executionConfig?: WorkflowLookupExecutionConfig | null;
+}
+
+export interface WorkflowLookupPreviewInput {
+  subjectId: string;
+}
+
+export interface WorkflowLookupActivateInput {
+  /**
+   * Optional. When omitted the definition's current draft version is
+   * activated. Provide to re-activate a specific historical version.
+   */
+  versionId?: string;
+}
+
+export interface WorkflowLookupPreviewResult {
+  kind: string;
+  matched: boolean | null;
+  reason: string;
+  targetRef: string | null;
+  targetRefs: string[];
+  trace: unknown;
+}
