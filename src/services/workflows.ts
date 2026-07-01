@@ -34,6 +34,10 @@ import {
   type WorkflowLookupPreviewResult,
   type WorkflowLookupSaveDraftInput,
   type WorkflowLookupVersion,
+  type WorkflowRunProgress,
+  type OrgWorkflowRunsQuery,
+  type WorkflowRunProgressQuery,
+  type PagedRunResult,
 } from '../types';
 import { type QuinnMutationReceipt } from '../mutations';
 
@@ -248,6 +252,46 @@ export class WorkflowsService {
       `/workflow-runs/${runId}`
     );
     return resp.data.item;
+  }
+
+  async listOrgRuns(
+    query: OrgWorkflowRunsQuery = {}
+  ): Promise<PagedRunResult<WorkflowRunSummary>> {
+    const resp = await this.http.get<PagedRunResult<WorkflowRunSummary>>(
+      '/workflow-runs',
+      {
+        params: {
+          status: query.status,
+          workflowId: query.workflowId,
+          subjectId: query.subjectId,
+          since: query.since,
+          until: query.until,
+          limit: query.limit,
+          cursor: query.cursor,
+        },
+      }
+    );
+    return resp.data;
+  }
+
+  async listRunProgress(
+    query: WorkflowRunProgressQuery = {}
+  ): Promise<PagedRunResult<WorkflowRunProgress>> {
+    const resp = await this.http.get<PagedRunResult<WorkflowRunProgress>>(
+      '/workflow-run-progress',
+      {
+        params: {
+          status: query.status,
+          workflowId: query.workflowId,
+          subjectId: query.subjectId,
+          since: query.since,
+          until: query.until,
+          limit: query.limit,
+          cursor: query.cursor,
+        },
+      }
+    );
+    return resp.data;
   }
 
   // --- Collections (Workspaces) ---
