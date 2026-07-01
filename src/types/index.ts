@@ -15,6 +15,7 @@ export * from './groups';
 export * from './locations';
 export * from './knowledge';
 export * from './sign-off';
+export * from './sign-off-reviews';
 export * from './notification';
 export * from './authoring';
 export * from './workflows';
