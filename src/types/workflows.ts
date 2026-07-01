@@ -175,7 +175,10 @@ export interface WorkflowRunSummary {
   orgId: string;
   customerWorkflowId: string;
   customerWorkflowVersionId: string;
+  /** Bare subject id (e.g. the "<id>" in "member/<id>"). */
   subjectId: string;
+  /** Raw routing ref, e.g. "member/<id>" or "org/<id>". */
+  subjectRef: string;
   status: WorkflowRunStatus;
   engineExecutionId: string | null;
   startedAt: string | null;
