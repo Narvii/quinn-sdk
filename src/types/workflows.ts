@@ -523,3 +523,13 @@ export interface WorkflowLookupPreviewResult {
   targetRefs: string[];
   trace: unknown;
 }
+
+// --- Workflow Trigger Fields ---
+
+export interface WorkflowTriggerField {
+  path: string;
+  label: string;
+  source: string; // "member" | "hris"
+  type?: string;
+  sampleValues?: string[];
+}
