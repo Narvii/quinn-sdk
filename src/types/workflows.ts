@@ -252,6 +252,77 @@ export interface WorkflowRunsListQuery {
   limit?: number;
 }
 
+// --- Workflow Run Progress (Ops) ---
+
+export type WorkflowInstanceCurrentPositionState =
+  | 'running'
+  | 'between_nodes'
+  | 'reconciling'
+  | 'completed'
+  | 'failed'
+  | 'canceled';
+
+export interface WorkflowOpsEntityRef {
+  id: string;
+  displayName: string;
+  slug?: string | null;
+}
+
+export interface WorkflowOpsSubjectRef {
+  type: string;
+  id: string;
+  displayName: string;
+  email?: string | null;
+}
+
+export interface WorkflowOpsActorRef {
+  ref: string;
+  type: string;
+  id?: string | null;
+  displayName: string;
+  email?: string | null;
+}
+
+export interface WorkflowRunProgress {
+  workflowInstanceId: string;
+  orgId: string;
+  org: WorkflowOpsEntityRef;
+  subject: WorkflowOpsSubjectRef;
+  workflowId: string;
+  workflowName: string;
+  workflowVersionId: string;
+  workflowVersionNumber: number;
+  status: WorkflowRunStatus;
+  state: WorkflowInstanceCurrentPositionState;
+  currentNodeIds: string[];
+  currentTaskIds: string[];
+  actorRefs: string[];
+  actors: WorkflowOpsActorRef[];
+  currentStepLabels: string[];
+  lastActivityAt: string;
+  startedAt?: string | null;
+  completedAt?: string | null;
+  failedAt?: string | null;
+}
+
+export interface WorkflowRunsFilter {
+  status?: WorkflowRunStatus;
+  workflowId?: string;
+  subjectId?: string;
+  since?: string;
+  until?: string;
+  cursor?: string;
+  limit?: number;
+}
+
+export type OrgWorkflowRunsQuery = WorkflowRunsFilter;
+export type WorkflowRunProgressQuery = WorkflowRunsFilter;
+
+export interface PagedRunResult<T> {
+  items: T[];
+  nextCursor?: string | null;
+}
+
 // --- Workflow Collections (Workspaces) ---
 
 export interface WorkflowCollection {
