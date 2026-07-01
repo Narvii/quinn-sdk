@@ -9,6 +9,7 @@ import {
   type WorkflowRunSummary,
   type WorkflowSummary,
   type WorkflowTrigger,
+  type WorkflowTriggerField,
   type WorkflowUpdateInput,
   type WorkflowValidationResult,
   type WorkflowVersionValidateInput,
@@ -229,6 +230,14 @@ export class WorkflowsService {
       `/workflows/${workflowId}/versions/${versionId}/triggers`
     );
     return resp.data.items;
+  }
+
+  async listTriggerFields(eventType: string): Promise<WorkflowTriggerField[]> {
+    const resp = await this.http.get<{ fields: WorkflowTriggerField[] }>(
+      '/workflow/trigger-fields',
+      { params: { eventType } }
+    );
+    return resp.data.fields;
   }
 
   async listRuns(
