@@ -12,7 +12,21 @@ export interface Member {
   locationId: string | null;
   createdAt: string;
   phoneNumber: string | null;
+  // Lifecycle. activatedAt is when the invite was accepted. A member with
+  // deactivated=true is a former member and deactivatedAt is when they left.
+  activatedAt: string | null;
+  deactivated: boolean;
+  deactivatedAt: string | null;
 }
+
+// `deactivated` is an alias of `former` and `active` an alias of `current`.
+// Absent means `current`; anything else is rejected by the API with a 400.
+export type MemberLifecycleStatus =
+  | 'current'
+  | 'former'
+  | 'all'
+  | 'deactivated'
+  | 'active';
 
 export interface MembersListQuery extends PaginationQuery {
   search?: string;
@@ -21,6 +35,7 @@ export interface MembersListQuery extends PaginationQuery {
   groupId?: string;
   locationId?: string;
   roleId?: string;
+  status?: MemberLifecycleStatus;
 }
 
 export interface MembersBatchGetInput {

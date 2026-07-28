@@ -17,6 +17,19 @@ import {
   MembersUpdateRolesInput,
   PagedResult,
 } from '../types';
+import { buildQueryParams } from '../query-params';
+
+const MEMBERS_LIST_PARAMS = [
+  'limit',
+  'token',
+  'search',
+  'managerUid',
+  'groupId',
+  'locationId',
+  'roleId',
+  'privilege',
+  'status',
+] as const;
 
 export class MembersService {
   constructor(
@@ -25,18 +38,11 @@ export class MembersService {
   ) {}
 
   async list(query: MembersListQuery = {}): Promise<PagedResult<Member>> {
-    const params: Record<string, string | number | undefined> = {
-      limit: query.limit,
-      token: query.token,
-      search: query.search,
-      managerUid: query.managerUid,
-      groupId: query.groupId,
-      locationId: query.locationId,
-      roleId: query.roleId,
-      privilege: Array.isArray(query.privilege)
-        ? query.privilege.join(',')
-        : query.privilege,
-    };
+    const params = buildQueryParams(
+      'members.list',
+      query,
+      MEMBERS_LIST_PARAMS
+    );
     const resp = await this.http.get<PagedResult<Member>>(
       '/members',
       { params }

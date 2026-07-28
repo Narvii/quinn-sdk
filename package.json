@@ -1,6 +1,6 @@
 {
   "name": "@kaizenlabs/quinn-sdk",
-  "version": "1.20.0",
+  "version": "1.21.0",
   "description": "TypeScript SDK for Quinn Platform API.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -22,13 +22,16 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf dist",
-    "pack:check": "npm pack --dry-run"
+    "pack:check": "npm pack --dry-run",
+    "typecheck:test": "tsc -p tsconfig.test.json",
+    "test": "npm run typecheck:test && node --import tsx --test \"test/**/*.test.ts\""
   },
   "dependencies": {
     "axios": "^1.8.4"
   },
   "devDependencies": {
     "@types/node": "^22.13.10",
+    "tsx": "^4.19.3",
     "typescript": "^5.8.2"
   }
 }
