@@ -50,6 +50,7 @@ export type {
   QuinnMutationReceipt,
 } from './mutations';
 export { QuinnMutationGuardError } from './mutation-access';
+export { QuinnUnknownQueryParamError } from './query-params';
 export { AutomationsService } from './services/automations';
 export { AssessmentsService } from './services/assessments';
 export { AuthoringService } from './services/authoring';
