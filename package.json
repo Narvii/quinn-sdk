@@ -24,7 +24,7 @@
     "clean": "rm -rf dist",
     "pack:check": "npm pack --dry-run",
     "typecheck:test": "tsc -p tsconfig.test.json",
-    "test": "npm run typecheck:test && node --import tsx --test \"test/**/*.test.ts\""
+    "test": "npm run typecheck:test && node --import tsx --test test/*.test.ts"
   },
   "dependencies": {
     "axios": "^1.8.4"
