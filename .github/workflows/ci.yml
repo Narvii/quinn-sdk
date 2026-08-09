@@ -26,5 +26,8 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Public Surface Contract
+        run: npm run test:surface
+
       - name: Package Dry Run
         run: npm run pack:check
