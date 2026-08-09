@@ -5,8 +5,6 @@ import {
   RolesListQuery,
   RolesCreateInput,
   RolesUpdateInput,
-  RolesUpdateLevelsInput,
-  Level,
 } from '../types';
 
 export class RolesService {
@@ -58,14 +56,5 @@ export class RolesService {
   async delete(roleId: string): Promise<void> {
     this.assertMutationAllowed('roles.delete');
     await this.http.delete(`/roles/${roleId}`);
-  }
-
-  async updateLevels(input: RolesUpdateLevelsInput): Promise<Level[]> {
-    this.assertMutationAllowed('roles.updateLevels');
-    const resp = await this.http.put<{ items: Level[] }>(
-      `/roles/${input.roleId}/levels`,
-      { levels: input.levels }
-    );
-    return resp.data.items;
   }
 }

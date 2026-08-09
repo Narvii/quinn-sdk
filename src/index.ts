@@ -14,12 +14,9 @@ import { AutomationsService } from './services/automations';
 import { AuthoringService } from './services/authoring';
 import { AssessmentsService } from './services/assessments';
 import { AssignmentsService } from './services/assignments';
-import { CompetenciesService } from './services/competencies';
 import { CoursesService } from './services/courses';
-import { EndorsementsService } from './services/endorsements';
 import { GroupsService } from './services/groups';
 import { KnowledgeService } from './services/knowledge';
-import { LevelsService } from './services/levels';
 import { LocationsService } from './services/locations';
 import { MembersService } from './services/members';
 import { NotificationService } from './services/notification';
@@ -77,14 +74,11 @@ export class Quinn {
   readonly members: MembersService;
   readonly notification: NotificationService;
   readonly roles: RolesService;
-  readonly levels: LevelsService;
-  readonly competencies: CompetenciesService;
   readonly courses: CoursesService;
   readonly assignments: AssignmentsService;
   readonly progressions: ProgressionsService;
   readonly groups: GroupsService;
   readonly programs: ProgramsService;
-  readonly endorsements: EndorsementsService;
   readonly signOff: SignOffService;
   readonly signOffReviews: SignOffReviewsService;
   readonly workflows: WorkflowsService;
@@ -114,14 +108,11 @@ export class Quinn {
       this.assertMutationAllowed
     );
     this.roles = new RolesService(this.http, this.assertMutationAllowed);
-    this.levels = new LevelsService(this.http);
-    this.competencies = new CompetenciesService(this.http, this.assertMutationAllowed);
     this.courses = new CoursesService(this.http, this.assertMutationAllowed);
     this.assignments = new AssignmentsService(this.http);
     this.progressions = new ProgressionsService(this.http);
     this.groups = new GroupsService(this.http, this.assertMutationAllowed);
     this.programs = new ProgramsService(this.http, this.assertMutationAllowed);
-    this.endorsements = new EndorsementsService(this.http, this.assertMutationAllowed);
     this.signOff = new SignOffService(
       this.http,
       this.assertMutationAllowed,

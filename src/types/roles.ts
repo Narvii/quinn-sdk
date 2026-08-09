@@ -3,7 +3,6 @@ import { PaginationQuery } from './common';
 export interface Role {
   id: string;
   label: string;
-  levelIds: string[];
   createdAt: string;
   updatedAt: string;
 }
@@ -17,14 +16,4 @@ export interface RolesCreateInput {
 export interface RolesUpdateInput {
   roleId: string;
   label?: string;
-}
-
-export interface RoleLevelInput {
-  id?: string;
-  name: string;
-}
-
-export interface RolesUpdateLevelsInput {
-  roleId: string;
-  levels: RoleLevelInput[];
 }

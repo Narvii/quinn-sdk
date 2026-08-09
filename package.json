@@ -1,6 +1,6 @@
 {
   "name": "@kaizenlabs/quinn-sdk",
-  "version": "1.20.0",
+  "version": "2.0.0",
   "description": "TypeScript SDK for Quinn Platform API.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -21,6 +21,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "test:surface": "node tests/public-surface.mjs",
     "clean": "rm -rf dist",
     "pack:check": "npm pack --dry-run"
   },
